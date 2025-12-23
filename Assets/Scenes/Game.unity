@@ -4178,7 +4178,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   cameraTarget: {fileID: 978978654}
+  cinemachineCamera: {fileID: 162140644}
   keyboardPanSpeed: 5
+  zoomSpeed: 1
+  minZoomDistance: 7.5
 --- !u!1001 &332197402
 PrefabInstance:
   m_ObjectHideFlags: 0
