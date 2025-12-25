@@ -4,16 +4,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] private Transform cameraTarget;
+    [SerializeField] private Rigidbody cameraTarget;
     [SerializeField] private CinemachineCamera cinemachineCamera;
 
-    [SerializeField] private float keyboardPanSpeed = 5f;
-    [SerializeField] private float zoomSpeed = 1f;
-    [SerializeField] private float minZoomDistance = 7.5f;
+    //Script for reference to camera configuration
+    [SerializeField] private CameraConfig cameraConfig;
 
     private CinemachineFollow cinemachineFollow;
     private float zoomStartTime;
+    private float rotationStartTime;
     private Vector3 startingFollowOffset;
+    private float maxRotationAmount;
 
     private void Awake()
     {
@@ -24,37 +25,84 @@ public class PlayerInput : MonoBehaviour
         }
 
         startingFollowOffset = cinemachineFollow.FollowOffset;
+        maxRotationAmount = Mathf.Abs(cinemachineFollow.FollowOffset.z);
     }
 
     private void Update()
     {
         CameraMovement();
         CameraZoom();
+        CameraRotation();
     }
 
     private void CameraMovement()
     {
+        Vector2 moveAmount = GetKeyboardMoveAround();
+        moveAmount += GetMouseMoveAmount();
+
+        cameraTarget.linearVelocity = new Vector3(moveAmount.x, 0, moveAmount.y);
+    }
+
+    private Vector2 GetKeyboardMoveAround()
+    {
         Vector2 moveAmount = Vector2.zero;
 
-        if (Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed)
+        if (Keyboard.current.upArrowKey.isPressed
+            || Keyboard.current.wKey.isPressed)
         {
-            moveAmount.y += keyboardPanSpeed;
+            moveAmount.y += cameraConfig.KeyboardPanSpeed;
         }
-        if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
+        if (Keyboard.current.leftArrowKey.isPressed
+            || Keyboard.current.aKey.isPressed)
         {
-            moveAmount.x -= keyboardPanSpeed;
+            moveAmount.x -= cameraConfig.KeyboardPanSpeed;
         }
-        if (Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed)
+        if (Keyboard.current.downArrowKey.isPressed
+            || Keyboard.current.sKey.isPressed)
         {
-            moveAmount.y -= keyboardPanSpeed;
+            moveAmount.y -= cameraConfig.KeyboardPanSpeed;
         }
-        if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
+        if (Keyboard.current.rightArrowKey.isPressed
+            || Keyboard.current.dKey.isPressed)
         {
-            moveAmount.x += keyboardPanSpeed;
+            moveAmount.x += cameraConfig.KeyboardPanSpeed;
         }
 
-        moveAmount *= Time.deltaTime;
-        cameraTarget.position += new Vector3(moveAmount.x, 0, moveAmount.y);
+        return moveAmount;
+    }
+
+    private Vector2 GetMouseMoveAmount()
+    {
+        Vector2 moveAmount = Vector2.zero;
+
+        if (!cameraConfig.EnableEdgePan)
+        {
+            return moveAmount;
+        }
+
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        int screenWidth = Screen.width; // 1920
+        int screenHeight = Screen.height; // 1080
+
+        if (mousePosition.x <= cameraConfig.EdgePanSize)
+        {
+            moveAmount.x -= cameraConfig.MousePanSpeed;
+        }
+        else if (mousePosition.x >= screenWidth - cameraConfig.EdgePanSize)
+        {
+            moveAmount.x += cameraConfig.MousePanSpeed;
+        }
+
+        if (mousePosition.y >= screenHeight - cameraConfig.EdgePanSize)
+        {
+            moveAmount.y += cameraConfig.MousePanSpeed;
+        }
+        else if (mousePosition.y <= cameraConfig.EdgePanSize)
+        {
+            moveAmount.y -= cameraConfig.MousePanSpeed;
+        }
+
+        return moveAmount;
     }
 
     private void CameraZoom()
@@ -64,12 +112,12 @@ public class PlayerInput : MonoBehaviour
             zoomStartTime = Time.time;
         }
 
-        float zoomTime = Mathf.Clamp01((Time.time - zoomStartTime) * zoomSpeed);
+        float zoomTime = Mathf.Clamp01((Time.time - zoomStartTime) * cameraConfig.ZoomSpeed);
         Vector3 targetFollowOffset;
 
         if (Keyboard.current.endKey.isPressed)
         {
-            targetFollowOffset = new Vector3(cinemachineFollow.FollowOffset.x, minZoomDistance, cinemachineFollow.FollowOffset.z);
+            targetFollowOffset = new Vector3(cinemachineFollow.FollowOffset.x, cameraConfig.MinZoomDistance, cinemachineFollow.FollowOffset.z);
         }
         else
         {
@@ -82,6 +130,48 @@ public class PlayerInput : MonoBehaviour
 
     private bool ShouldZoomTimeStart()
     {
-        return Keyboard.current.endKey.wasPressedThisFrame || Keyboard.current.endKey.wasReleasedThisFrame;
+        return Keyboard.current.endKey.wasPressedThisFrame 
+            || Keyboard.current.endKey.wasReleasedThisFrame;
+    }
+
+    private void CameraRotation()
+    {
+        if (ShouldRotationTimeStart())
+        {
+            rotationStartTime = Time.time;
+        }
+
+        float rotationTime = Mathf.Clamp01((Time.time - rotationStartTime) * cameraConfig.RotationSpeed);
+
+        Vector3 targetFollowOffset;
+
+        if (Keyboard.current.pageDownKey.isPressed
+            || Keyboard.current.qKey.isPressed)
+        {
+            targetFollowOffset = new Vector3(maxRotationAmount, cinemachineFollow.FollowOffset.y, 0);
+        }
+        else if (Keyboard.current.pageUpKey.isPressed
+            || Keyboard.current.rKey.isPressed)
+        {
+            targetFollowOffset = new Vector3(-maxRotationAmount, cinemachineFollow.FollowOffset.y, 0);
+        }
+        else
+        {
+            targetFollowOffset = new Vector3(startingFollowOffset.x, cinemachineFollow.FollowOffset.y, startingFollowOffset.z);
+        }
+
+            cinemachineFollow.FollowOffset = Vector3.Slerp(cinemachineFollow.FollowOffset, targetFollowOffset, rotationTime);
+    }
+
+    private bool ShouldRotationTimeStart()
+    {
+        return Keyboard.current.pageUpKey.wasPressedThisFrame 
+            || Keyboard.current.pageDownKey.wasPressedThisFrame 
+            || Keyboard.current.pageUpKey.wasReleasedThisFrame 
+            || Keyboard.current.pageDownKey.wasReleasedThisFrame
+            || Keyboard.current.rKey.wasPressedThisFrame
+            || Keyboard.current.qKey.wasPressedThisFrame
+            || Keyboard.current.rKey.wasReleasedThisFrame
+            || Keyboard.current.qKey.wasReleasedThisFrame;
     }
 }
