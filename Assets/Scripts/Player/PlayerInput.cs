@@ -6,7 +6,8 @@ public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private Rigidbody cameraTarget;
     [SerializeField] private CinemachineCamera cinemachineCamera;
-
+    [SerializeField] private new Camera camera;
+    [SerializeField] private LayerMask selectableUnitsLayers;
     //Script for reference to camera configuration
     [SerializeField] private CameraConfig cameraConfig;
 
@@ -15,6 +16,9 @@ public class PlayerInput : MonoBehaviour
     private float rotationStartTime;
     private Vector3 startingFollowOffset;
     private float maxRotationAmount;
+    private ISelectable selectedUnit;
+
+
 
     private void Awake()
     {
@@ -33,6 +37,7 @@ public class PlayerInput : MonoBehaviour
         CameraMovement();
         CameraZoom();
         CameraRotation();
+        HandleLeftClick();
     }
 
     private void CameraMovement()
@@ -173,5 +178,31 @@ public class PlayerInput : MonoBehaviour
             || Keyboard.current.qKey.wasPressedThisFrame
             || Keyboard.current.rKey.wasReleasedThisFrame
             || Keyboard.current.qKey.wasReleasedThisFrame;
+    }
+
+    private void HandleLeftClick()
+    {
+        if (camera ==null)
+        {
+            return;
+        }
+
+        Ray cameraRay = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (selectedUnit != null)
+            {
+                selectedUnit.Deselect();
+                selectedUnit = null;
+            }
+
+            if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, selectableUnitsLayers)
+            && hit.collider.TryGetComponent(out ISelectable selectable))
+            {
+                selectable.Select();
+                selectedUnit = selectable;
+            }
+        }
     }
 }
