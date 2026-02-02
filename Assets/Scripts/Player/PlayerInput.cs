@@ -1,3 +1,4 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,8 +9,12 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private CinemachineCamera cinemachineCamera;
     [SerializeField] private new Camera camera;
     [SerializeField] private LayerMask selectableUnitsLayers;
+    [SerializeField] private LayerMask floorLayers;
+    [SerializeField] private RectTransform selectionBox;
     //Script for reference to camera configuration
     [SerializeField] private CameraConfig cameraConfig;
+
+    private Vector2 startingMousePosition;
 
     private CinemachineFollow cinemachineFollow;
     private float zoomStartTime;
@@ -30,6 +35,24 @@ public class PlayerInput : MonoBehaviour
 
         startingFollowOffset = cinemachineFollow.FollowOffset;
         maxRotationAmount = Mathf.Abs(cinemachineFollow.FollowOffset.z);
+
+        Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
+        Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselect;
+    }
+
+    private void OnDestroy()
+    {
+        Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
+    }
+
+    private void HandleUnitSelected(UnitSelectedEvent evt)
+    {
+        selectedUnit = evt.Unit;
+    }
+
+    private void HandleUnitDeselect(UnitDeselectEvent evt)
+    {
+        selectedUnit = null;
     }
 
     private void Update()
@@ -38,6 +61,8 @@ public class PlayerInput : MonoBehaviour
         CameraZoom();
         CameraRotation();
         HandleLeftClick();
+        HandleRightClick();
+        HandleDragSelect();
     }
 
     private void CameraMovement()
@@ -86,8 +111,8 @@ public class PlayerInput : MonoBehaviour
         }
 
         Vector2 mousePosition = Mouse.current.position.ReadValue();
-        int screenWidth = Screen.width; // 1920
-        int screenHeight = Screen.height; // 1080
+        int screenWidth = Screen.width;     // 1920
+        int screenHeight = Screen.height;   // 1080
 
         if (mousePosition.x <= cameraConfig.EdgePanSize)
         {
@@ -194,15 +219,67 @@ public class PlayerInput : MonoBehaviour
             if (selectedUnit != null)
             {
                 selectedUnit.Deselect();
-                selectedUnit = null;
             }
 
             if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, selectableUnitsLayers)
             && hit.collider.TryGetComponent(out ISelectable selectable))
             {
                 selectable.Select();
-                selectedUnit = selectable;
             }
         }
+    }
+
+    private void HandleRightClick()
+    {
+        if (selectedUnit == null || selectedUnit is not IMoveable moveable)
+        {
+            return;
+        }
+
+        Ray cameraRay = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Mouse.current.rightButton.wasReleasedThisFrame
+            && Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, floorLayers))
+        {
+            moveable.MoveTo(hit.point);
+        }
+    }
+
+    private void HandleDragSelect()
+    {
+        if (selectionBox == null)
+        {
+            return;
+        }
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            selectionBox.gameObject.SetActive(true);                    // enable selection box ui
+            startingMousePosition = Mouse.current.position.ReadValue(); // store start position
+        }
+        else if (Mouse.current.leftButton.isPressed
+            && !Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            ResizeSelectionBox();
+        }
+        else if (Mouse.current.leftButton.wasReleasedThisFrame)
+        {
+            // Select units within box
+            // deselect selected units if not in box
+            selectionBox.gameObject.SetActive(false);   // disable the ui
+        }
+    }
+
+    private void ResizeSelectionBox()
+    {
+        // resize selection box
+
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+        float width = mousePosition.x - startingMousePosition.x;
+        float height = mousePosition.y - startingMousePosition.y;
+
+        selectionBox.anchoredPosition = startingMousePosition + new Vector2(width / 2, height / 2);
+        selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
     }
 }
