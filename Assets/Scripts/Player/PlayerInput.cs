@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -241,6 +240,44 @@ public class PlayerInput : MonoBehaviour
         if (Mouse.current.rightButton.wasReleasedThisFrame
             && Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, floorLayers))
         {
+            List<AbstractUnit> abstractUnits = new List<AbstractUnit>(selectedUnits.Count);
+
+            foreach (ISelectable selectable in selectedUnits)
+            {
+                if (selectable is AbstractUnit unit)
+                { 
+                    abstractUnits.Add(unit);
+                }
+            }
+
+            int layer = 0;
+            int unitsOnLayer = 0;
+            int maxUnitsOnLayer = 1;
+            float circleRadius = 0f;
+            float radialOffset = 0f;
+
+            foreach (AbstractUnit unit in abstractUnits)
+            {
+                Vector3 targetPosition = new(
+                    hit.point.x + circleRadius * Mathf.Cos(radialOffset * unitsOnLayer), 
+                    hit.point.y,
+                    hit.point.z + circleRadius * Mathf.Sin(radialOffset * unitsOnLayer)
+                    );
+
+                unit.MoveTo(targetPosition);
+                unitsOnLayer++;
+
+                if (unitsOnLayer >= maxUnitsOnLayer)
+                {
+                    layer++;
+                    unitsOnLayer = 0;
+                    circleRadius += unit.AgentRadius * 3.5f;
+                    maxUnitsOnLayer = Mathf.FloorToInt(2 * Mathf.PI * circleRadius / (unit.AgentRadius * 2));
+                    radialOffset = 2 * Mathf.PI / maxUnitsOnLayer;
+                }
+            }
+
+            /*
             foreach (ISelectable selectable in selectedUnits)
             {
                 if (selectable is IMoveable moveable)
@@ -248,6 +285,7 @@ public class PlayerInput : MonoBehaviour
                     moveable.MoveTo(hit.point);
                 }
             }
+            */
         }
     }
 
