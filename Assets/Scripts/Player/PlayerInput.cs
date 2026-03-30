@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
@@ -16,6 +18,8 @@ public class PlayerInput : MonoBehaviour
 
     private Vector2 startingMousePosition;
 
+    private BaseAction activeAction;
+    private bool wasMouseDownOnUI;
     private CinemachineFollow cinemachineFollow;
     private float zoomStartTime;
     private float rotationStartTime;
@@ -41,6 +45,7 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent += HandleUnitSpawn;
+        Bus<ActionSelectedEvent>.OnEvent += HandleActionSelected;
     }
 
     private void OnDestroy()
@@ -48,6 +53,7 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent -= HandleUnitSpawn;
+        Bus<ActionSelectedEvent>.OnEvent -= HandleActionSelected;
 
     }
 
@@ -58,10 +64,9 @@ public class PlayerInput : MonoBehaviour
     }
     */
     private void HandleUnitSelected(UnitSelectedEvent evt) => selectedUnits.Add(evt.Unit);
-
     private void HandleUnitDeselect(UnitDeselectEvent evt) => selectedUnits.Remove(evt.Unit);
-
     private void HandleUnitSpawn(UnitSpawnEvent evt) => aliveUnits.Add(evt.Unit);
+    private void HandleActionSelected(ActionSelectedEvent evt) => activeAction = evt.Action;
 
     private void Update()
     {
@@ -214,17 +219,35 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleLeftClick()
     {
-        if (camera ==null)
+        if (camera == null)
         {
             return;
         }
 
         Ray cameraRay = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, selectableUnitsLayers)
-        && hit.collider.TryGetComponent(out ISelectable selectable))
+        if (activeAction == null
+            && Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, selectableUnitsLayers)
+            && hit.collider.TryGetComponent(out ISelectable selectable))
         {
             selectable.Select();
+        }
+        else if (activeAction != null
+            && !EventSystem.current.IsPointerOverGameObject()
+            && Physics.Raycast(cameraRay, out hit, float.MaxValue, floorLayers))
+        {
+            List<AbstractUnit> abstractUnits = selectedUnits
+                .Where((unit) => unit is AbstractUnit)
+                .Cast<AbstractUnit>()
+                .ToList();
+
+            for (int i = 0; i < abstractUnits.Count; i++)
+            {
+                CommandContext context = new(abstractUnits[i], hit, i);
+                activeAction.Handle(context);
+            }
+
+            activeAction = null;
         }
     }
 
@@ -250,42 +273,19 @@ public class PlayerInput : MonoBehaviour
                 }
             }
 
-            int layer = 0;
-            int unitsOnLayer = 0;
-            int maxUnitsOnLayer = 1;
-            float circleRadius = 0f;
-            float radialOffset = 0f;
-
-            foreach (AbstractUnit unit in abstractUnits)
+            for (int i = 0; i < abstractUnits.Count; i++)
             {
-                Vector3 targetPosition = new(
-                    hit.point.x + circleRadius * Mathf.Cos(radialOffset * unitsOnLayer), 
-                    hit.point.y,
-                    hit.point.z + circleRadius * Mathf.Sin(radialOffset * unitsOnLayer)
-                    );
+                CommandContext context = new(abstractUnits[i], hit, i);
 
-                unit.MoveTo(targetPosition);
-                unitsOnLayer++;
-
-                if (unitsOnLayer >= maxUnitsOnLayer)
+                foreach (ICommand command in abstractUnits[i].AvailableCommands)
                 {
-                    layer++;
-                    unitsOnLayer = 0;
-                    circleRadius += unit.AgentRadius * 3.5f;
-                    maxUnitsOnLayer = Mathf.FloorToInt(2 * Mathf.PI * circleRadius / (unit.AgentRadius * 2));
-                    radialOffset = 2 * Mathf.PI / maxUnitsOnLayer;
+                    if (command.CanHandle(context))
+                    {
+                        command.Handle(context);
+                        break;
+                    }
                 }
             }
-
-            /*
-            foreach (ISelectable selectable in selectedUnits)
-            {
-                if (selectable is IMoveable moveable)
-                {
-                    moveable.MoveTo(hit.point);
-                }
-            }
-            */
         }
     }
 
@@ -313,14 +313,20 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseDown()
     {
-        selectionBox.sizeDelta = Vector2.zero;                      // reset size
-        selectionBox.gameObject.SetActive(true);                    // enable selection box ui
-        startingMousePosition = Mouse.current.position.ReadValue(); // store start position
-        addedUnits.Clear();                                         // clear added units
+        selectionBox.sizeDelta = Vector2.zero;                              // reset size
+        selectionBox.gameObject.SetActive(true);                            // enable selection box ui
+        startingMousePosition = Mouse.current.position.ReadValue();         // store start position
+        addedUnits.Clear();                                                 // clear added units
+        wasMouseDownOnUI = EventSystem.current.IsPointerOverGameObject();   // check if mouse was pressed on UI
     }
 
     private void HandleMouseDrag()
     {
+        if (activeAction != null || wasMouseDownOnUI)
+        {
+            return;
+        }
+
         Bounds selectionBoxBounds = ResizeSelectionBox();
 
         foreach (AbstractUnit unit in aliveUnits)
@@ -337,7 +343,7 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseUp()
     {
-        if (!Keyboard.current.shiftKey.isPressed)
+        if (activeAction == null && !Keyboard.current.shiftKey.isPressed)
         {
             DeselectAllUnits();
         }

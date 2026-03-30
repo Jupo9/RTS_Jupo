@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6373942607041070935}
   - component: {fileID: 4998999097916986450}
   - component: {fileID: 6647158474348417167}
-  - component: {fileID: 7562683155289840355}
   m_Layer: 6
   m_Name: Air Transport
   m_TagString: Untagged
@@ -149,22 +148,6 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 0
   decalProjector: {fileID: 7076472010120791841}
   unitSO: {fileID: 11400000, guid: d1b7c81584d41554e97b9ac3ccdcab28, type: 2}
---- !u!114 &7562683155289840355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076983579694789324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39b4fc99c9998f468f3035849d2b1b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit_Worker
-  <CurrentHealth>k__BackingField: 0
-  <MaxHealth>k__BackingField: 0
-  decalProjector: {fileID: 7076472010120791841}
-  unitSO: {fileID: 0}
 --- !u!1 &3197536151429106847
 GameObject:
   m_ObjectHideFlags: 0

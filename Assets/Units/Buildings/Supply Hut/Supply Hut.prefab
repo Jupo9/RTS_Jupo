@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3007753749229990871}
   - component: {fileID: 2422821575361291847}
-  - component: {fileID: -2386857603693005085}
+  - component: {fileID: 2823666969526432363}
   - component: {fileID: 2090724626757431204}
   m_Layer: 7
   m_Name: Supply Hut
@@ -117,7 +117,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 1.5, z: 2}
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &-2386857603693005085
+--- !u!114 &2823666969526432363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,9 +126,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6964012305514025925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a1c32be442d6b34fa8b652f1a2f4ee7, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f87b462ce3ce294495c78e62fc1dc5b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Building_SupplyHut
+  m_EditorClassIdentifier: Assembly-CSharp::BaseBuilding
   <CurrentHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
   decalProjector: {fileID: 2158089260880446154}
