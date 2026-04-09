@@ -3,18 +3,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ActionsUI : MonoBehaviour
+public class ActionsUI : MonoBehaviour, IUIElement<HashSet<AbstractCommandable>>
 {
     [SerializeField] private UIActionButton[] actionButtons;
     private HashSet<AbstractCommandable> selectedUnits = new(12);
 
-    private void Awake()
+    public void EnableFor(HashSet<AbstractCommandable> selectedUnits)
     {
-        Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
-        Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselect;
+        RefreshButtons(selectedUnits);
     }
 
-    private void Start()
+    public void Disable()
     {
         foreach (UIActionButton button in actionButtons)
         {
@@ -22,31 +21,7 @@ public class ActionsUI : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
-        Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselect;
-    }
-
-    private void HandleUnitSelected(UnitSelectedEvent evt)
-    {
-        if (evt.Unit is AbstractCommandable commandable)
-        {
-            selectedUnits.Add(commandable);
-            RefreshButtons();
-        }
-    }
-
-    private void HandleUnitDeselect(UnitDeselectEvent evt)
-    {
-        if (evt.Unit is AbstractCommandable commandable)
-        {
-            selectedUnits.Remove(commandable);
-            RefreshButtons();
-        }
-    }
-
-    private void RefreshButtons()
+    private void RefreshButtons(HashSet<AbstractCommandable> selectedUnits)
     {
         HashSet<BaseAction> availableCommands = new(9);
 

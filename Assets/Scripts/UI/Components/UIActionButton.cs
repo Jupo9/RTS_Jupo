@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class UIActionButton : MonoBehaviour
+public class UIActionButton : MonoBehaviour, IUIElement<BaseAction, UnityAction>
 {
     [SerializeField] private Image icon;
 
@@ -12,6 +12,7 @@ public class UIActionButton : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
+        Disable();
     }
 
     public void EnableFor(BaseAction action, UnityAction onClick)
