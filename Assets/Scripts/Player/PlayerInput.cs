@@ -69,7 +69,7 @@ public class PlayerInput : MonoBehaviour
     private void HandleActionSelected(ActionSelectedEvent evt)
     {
         activeAction = evt.Action;
-        if (!activeAction.RequiresClockToActive)
+        if (!activeAction.RequiresClickToActive)
         {
             // immediately handle the action
             ActivateAction(new RaycastHit());
