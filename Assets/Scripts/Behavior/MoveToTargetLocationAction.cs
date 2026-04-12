@@ -38,7 +38,7 @@ public partial class MoveToTargetLocationAction : Action
             return Status.Success;
         }
 
-        return Status.Success;
+        return Status.Running;
     }
 }
 

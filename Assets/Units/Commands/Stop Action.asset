@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759b028d30bffc142bb184ba06ea7cab, type: 3}
   m_Name: Stop Action
   m_EditorClassIdentifier: Assembly-CSharp::StopCommand
-  <Icon>k__BackingField: {fileID: 0}
-  <RequiresClockToActive>k__BackingField: 1
-  <Slot>k__BackingField: 0
+  <Icon>k__BackingField: {fileID: 21300000, guid: 1a3a199fa1bcd2642a8472336cb43de1, type: 3}
+  <RequiresClickToActive>k__BackingField: 0
+  <Slot>k__BackingField: 1

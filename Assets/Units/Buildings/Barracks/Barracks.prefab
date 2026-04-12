@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4556868348065212012}
   - component: {fileID: 4212464277386913961}
+  - component: {fileID: 5860653275703972011}
   m_Layer: 0
   m_Name: Barracks
   m_TagString: Untagged
@@ -54,6 +55,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 2, z: 3}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5860653275703972011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827066523746683823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f87b462ce3ce294495c78e62fc1dc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseBuilding
+  <CurrentHealth>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <AvailableCommands>k__BackingField:
+  - {fileID: 11400000, guid: 80620757db735cb4692541497875ffe9, type: 2}
+  - {fileID: 11400000, guid: 9176896a565ee6244a20fc25d34d5563, type: 2}
+  <UnitSO>k__BackingField: {fileID: 11400000, guid: 4ec845a35d15ec743b7ca96037d03801, type: 2}
+  decalProjector: {fileID: 0}
+  <CurrentQueueStartTime>k__BackingField: 0
+  <BuildingUnit>k__BackingField: {fileID: 0}
 --- !u!1001 &1460921894348755246
 PrefabInstance:
   m_ObjectHideFlags: 0

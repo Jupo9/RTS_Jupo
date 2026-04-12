@@ -131,8 +131,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BaseBuilding
   <CurrentHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
+  <AvailableCommands>k__BackingField: []
+  <UnitSO>k__BackingField: {fileID: 11400000, guid: bede3cc8c10815e4aa8593e853216781, type: 2}
   decalProjector: {fileID: 2158089260880446154}
-  unitSO: {fileID: 11400000, guid: d1b7c81584d41554e97b9ac3ccdcab28, type: 2}
+  <CurrentQueueStartTime>k__BackingField: 0
+  <BuildingUnit>k__BackingField: {fileID: 0}
 --- !u!208 &2090724626757431204
 NavMeshObstacle:
   m_ObjectHideFlags: 0

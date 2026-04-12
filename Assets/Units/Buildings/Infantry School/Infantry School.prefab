@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9141702999126743492}
   - component: {fileID: 740059083589345232}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Infantry School
   m_TagString: Untagged
   m_Icon: {fileID: 0}
