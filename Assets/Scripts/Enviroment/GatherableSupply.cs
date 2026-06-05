@@ -37,4 +37,9 @@ public class GatherableSupply : MonoBehaviour, IGatherable
 
         return amountGathered;
     }
+
+    public void AbortGather()
+    {
+        IsBusy = false;
+    }
 }
