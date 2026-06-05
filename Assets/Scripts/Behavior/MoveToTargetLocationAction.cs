@@ -13,6 +13,7 @@ public partial class MoveToTargetLocationAction : Action
     [SerializeReference] public BlackboardVariable<Vector3> TargetLocation;
 
     private NavMeshAgent agent;
+    private Animator animator;
 
     protected override Status OnStart()
     {
@@ -20,6 +21,8 @@ public partial class MoveToTargetLocationAction : Action
         {
             return Status.Failure;
         }
+
+        Agent.Value.TryGetComponent(out animator);
 
         if (Vector3.Distance(agent.transform.position, TargetLocation.Value) <= agent.stoppingDistance)
         {
@@ -33,12 +36,25 @@ public partial class MoveToTargetLocationAction : Action
 
     protected override Status OnUpdate()
     {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, agent.velocity.magnitude);
+        }
+
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             return Status.Success;
         }
 
         return Status.Running;
+    }
+
+    protected override void OnEnd()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, 0);
+        }
     }
 }
 

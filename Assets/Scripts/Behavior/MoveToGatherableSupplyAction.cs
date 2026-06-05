@@ -15,6 +15,7 @@ public partial class MoveToGatherableSupplyAction : Action
     [SerializeReference] public BlackboardVariable<float> SearchRadius = new(7f);
 
     private NavMeshAgent agent;
+    private Animator animator;
     private LayerMask suppliesMask;
     private SupplySO supplySO;
 
@@ -27,6 +28,8 @@ public partial class MoveToGatherableSupplyAction : Action
             return Status.Failure;
         }
 
+        agent.TryGetComponent(out animator);
+
         Vector3 targetPosition = GetTargetPosition();
 
         agent.SetDestination(targetPosition);
@@ -35,6 +38,11 @@ public partial class MoveToGatherableSupplyAction : Action
 
     protected override Status OnUpdate()
     {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, agent.velocity.magnitude);
+        }
+
         if (agent.pathPending)
         {
             return Status.Running;
@@ -45,7 +53,8 @@ public partial class MoveToGatherableSupplyAction : Action
             return Status.Running;
         }
 
-        if (Supply.Value != null && !Supply.Value.IsBusy && Supply.Value.Amount > 0)
+        //Supply.Value != null && 
+        if (!Supply.Value.IsBusy && Supply.Value.Amount > 0)
         {
             return Status.Success;
         }
@@ -63,9 +72,17 @@ public partial class MoveToGatherableSupplyAction : Action
         return Status.Failure;
     }
 
+    protected override void OnEnd()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, 0);
+        }
+    }
+
     private bool HasValidInputs()
     {
-        if (!Agent.Value.TryGetComponent(out agent) || Supply.Value == null && supplySO == null)
+        if (!Agent.Value.TryGetComponent(out agent) || (Supply.Value == null && supplySO == null))
         {
             return false;
         }
@@ -101,7 +118,7 @@ public partial class MoveToGatherableSupplyAction : Action
         ).Where(collider =>
                 collider.TryGetComponent(out GatherableSupply supply)
                 && !supply.IsBusy
-                && supply.Supply.Equals(Supply.Value.Supply)
+                && supply.Supply.Equals(supplySO)
         ).ToArray();
     }
 

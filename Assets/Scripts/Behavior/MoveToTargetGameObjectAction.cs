@@ -13,6 +13,7 @@ public partial class MoveToTargetGameObjectAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> TargetGameObject;
 
     private NavMeshAgent agent;
+    private Animator animator;
 
     protected override Status OnStart()
     {
@@ -20,6 +21,8 @@ public partial class MoveToTargetGameObjectAction : Action
         {
             return Status.Failure;
         }
+
+        Agent.Value.TryGetComponent(out animator);
 
         Vector3 targetPosition = GetTargetPosition();
 
@@ -35,6 +38,11 @@ public partial class MoveToTargetGameObjectAction : Action
 
     protected override Status OnUpdate()
     {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, agent.velocity.magnitude);
+        }
+
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             return Status.Success;
@@ -58,5 +66,11 @@ public partial class MoveToTargetGameObjectAction : Action
 
         return targetPosition;
     }
+    protected override void OnEnd()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat(AnimationConstants.SPEED, 0);
+        }
+    }
 }
-
