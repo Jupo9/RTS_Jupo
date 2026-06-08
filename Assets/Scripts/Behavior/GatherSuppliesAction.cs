@@ -11,6 +11,7 @@ public partial class GatherSuppliesAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Unit;
     [SerializeReference] public BlackboardVariable<int> Amount;
     [SerializeReference] public BlackboardVariable<GatherableSupply> GatherableSupplies;
+    [SerializeReference] public BlackboardVariable<SupplySO> SupplySO;
 
     private float enterTime;
     private Animator animator;
@@ -30,6 +31,7 @@ public partial class GatherSuppliesAction : Action
         }
 
         GatherableSupplies.Value.BeginGather();
+        SupplySO.Value = GatherableSupplies.Value.Supply;
         return Status.Running;
     }
 

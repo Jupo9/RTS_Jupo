@@ -7461,6 +7461,7 @@ GameObject:
   - component: {fileID: 640315632}
   - component: {fileID: 640315631}
   - component: {fileID: 640315635}
+  - component: {fileID: 640315636}
   m_Layer: 5
   m_Name: Runtime UI UGUI
   m_TagString: Untagged
@@ -7566,6 +7567,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RuntimeUI
   actionsUI: {fileID: 1741608388}
   buildingBuildingUI: {fileID: 1619984283}
+--- !u!114 &640315636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640315630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe53b34a2d339d41b063585b29ac2ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Supplies
+  mineralsText: {fileID: 820690752}
+  gasText: {fileID: 75462576}
+  populationText: {fileID: 893058838}
+  mineralsSO: {fileID: 11400000, guid: 596928915bbefc749bd7590430e6eeb2, type: 2}
+  gasSO: {fileID: 11400000, guid: 00d233a700bad6c4694c12b1221aeff6, type: 2}
 --- !u!1001 &646904507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13041,7 +13059,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1016691561}
   m_Layer: 5
-  m_Name: Resources Bar
+  m_Name: Supplies Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
