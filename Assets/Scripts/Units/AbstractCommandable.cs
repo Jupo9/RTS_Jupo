@@ -7,14 +7,18 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
     [field: SerializeField] public int CurrentHealth { get; private set; }
     [field: SerializeField] public int MaxHealth { get; private set; }
     [field: SerializeField] public BaseAction[] AvailableCommands { get; private set; }
-    [field: SerializeField] public UnitSO UnitSO { get; private set; }
+    [field: SerializeField] public AbstractUnitSO UnitSO { get; private set; }
 
     [SerializeField] private DecalProjector decalProjector;
+
+    private BaseAction[] initialCommands;
 
     protected virtual void Start()
     {
         CurrentHealth = UnitSO.Health;
         MaxHealth = UnitSO.Health;
+
+        initialCommands = AvailableCommands;
     }
 
     public void Select()
@@ -34,6 +38,22 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
             decalProjector.gameObject.SetActive(false);
         }
 
+        SetCommandOverrides(null);
+
         Bus<UnitDeselectEvent>.Raise(new UnitDeselectEvent(this));
+    }
+
+    public void SetCommandOverrides(BaseAction[] commands)
+    {
+        if (commands == null || commands.Length == 0)
+        {
+            AvailableCommands = initialCommands;
+        }
+        else
+        {
+            AvailableCommands = commands;
+        }
+
+        Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
     }
 }

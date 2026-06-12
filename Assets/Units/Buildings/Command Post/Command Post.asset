@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a83f381fd8db24b44ad200de9b9dd473, type: 3}
+  m_Script: {fileID: 11500000, guid: f85cc5ed2b94d804ab3e022d12607a40, type: 3}
   m_Name: Command Post
-  m_EditorClassIdentifier: Assembly-CSharp::UnitSO
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingSO
   <Health>k__BackingField: 400
   <Prefab>k__BackingField: {fileID: 1589499662120937400, guid: 43943267dde60fe4a88cf5bd885c00e3, type: 3}
   <BuildTime>k__BackingField: 5
   <Icon>k__BackingField: {fileID: 21300000, guid: dfebbdf93f58d764ab9aa4d54edd629e, type: 3}
+  <PlacementMaterial>k__BackingField: {fileID: 2100000, guid: 4d67b194c7df28248ac11dfd9cbd7c97, type: 2}

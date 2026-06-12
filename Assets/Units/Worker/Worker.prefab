@@ -160,6 +160,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 547e90b69a49d19488d071dbb275903e, type: 2}
   - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
   - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
+  - {fileID: 11400000, guid: 627f6e3e652a7924786e5727990280fa, type: 2}
   <UnitSO>k__BackingField: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}
   decalProjector: {fileID: 6948966561873918116}
 --- !u!136 &1950760683771908850

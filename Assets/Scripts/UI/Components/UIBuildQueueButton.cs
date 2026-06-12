@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-class UIBuildQueueButton : MonoBehaviour, IUIElement<UnitSO, UnityAction>
+class UIBuildQueueButton : MonoBehaviour, IUIElement<AbstractUnitSO, UnityAction>
 {
     [SerializeField] private Image icon;
 
@@ -14,7 +14,7 @@ class UIBuildQueueButton : MonoBehaviour, IUIElement<UnitSO, UnityAction>
         Disable();
     }
 
-    public void EnableFor(UnitSO item, UnityAction callback)
+    public void EnableFor(AbstractUnitSO item, UnityAction callback)
     {
         button.onClick.RemoveAllListeners();
         button.interactable = true;

@@ -17,6 +17,7 @@ public class UIActionButton : MonoBehaviour, IUIElement<BaseAction, UnityAction>
 
     public void EnableFor(BaseAction action, UnityAction onClick)
     {
+        button.onClick.RemoveAllListeners();
         SetIcon(action.Icon);
         button.interactable = true;
         button.onClick.AddListener(onClick);

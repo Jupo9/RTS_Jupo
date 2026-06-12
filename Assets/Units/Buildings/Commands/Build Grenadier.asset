@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Build Grenadier
   m_EditorClassIdentifier: Assembly-CSharp::BuildUnitCommand
   <Icon>k__BackingField: {fileID: 21300000, guid: 920f021a2d26a374593bb761fa77d29d, type: 3}
-  <RequiresClockToActive>k__BackingField: 0
+  <RequiresClickToActive>k__BackingField: 1
   <Slot>k__BackingField: 1
-  <Unit>k__BackingField: {fileID: 11400000, guid: 4a4de0fdb203b384384de8eb48606115, type: 2}
+  <Unit>k__BackingField: {fileID: 11400000, guid: 77e0700f652137043aed71f83c7464ba, type: 2}

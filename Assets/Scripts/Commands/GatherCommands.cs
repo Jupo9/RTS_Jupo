@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "Gather Action", menuName = "AI/Commands/Gather", order = 105)]
+[CreateAssetMenu(fileName = "Gather Action", menuName = "Units/Commands/Gather", order = 105)]
 public class GatherCommands : BaseAction
 {
-    [SerializeField] private UnitSO commandPostSO;
+    [SerializeField] private AbstractUnitSO commandPostSO;
 
     public override bool CanHandle(CommandContext context)
     {
