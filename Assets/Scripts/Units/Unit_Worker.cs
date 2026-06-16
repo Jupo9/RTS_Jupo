@@ -1,7 +1,7 @@
 using Unity.Behavior;
 using UnityEngine;
 
-public class Unit_Worker : AbstractUnit
+public class Unit_Worker : AbstractUnit, IBuildingBuilder
 {
     public bool HasSupplies
     {
@@ -38,8 +38,30 @@ public class Unit_Worker : AbstractUnit
         graphAgent.SetVariableValue("Command", UnitCommands.ReturnSupplies);
     }
 
+    public GameObject Build(BuildingSO building, Vector3 targetLocation)
+    {
+        GameObject instance = Instantiate(building.Prefab, targetLocation, Quaternion.identity);
+        if (instance.TryGetComponent(out BaseBuilding baseBuilding))
+        {
+            baseBuilding.ShowGhostVisuals();
+        }
+        else
+        {
+            Debug.LogError($"Missing BaseBuilding on Prefab for BuildingSO \"{building.name}\"! Connat build!");
+            return null;
+        }
+
+        graphAgent.SetVariableValue("BuildingSO", building);
+        graphAgent.SetVariableValue("TargetLocation", targetLocation);
+        graphAgent.SetVariableValue("Ghost", instance);
+        graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
+
+        return instance;
+    }
+
     private void HandleGatherSupplies(GameObject self, int amount, SupplySO supply)
     {
         Bus<SupplyEvent>.Raise(new SupplyEvent(amount, supply));
     }
+
 }

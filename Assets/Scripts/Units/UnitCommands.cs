@@ -7,5 +7,6 @@ public enum UnitCommands
 	Stop,
 	Move,
 	Gather,
-	ReturnSupplies
+	ReturnSupplies,
+	BuildBuilding
 }
