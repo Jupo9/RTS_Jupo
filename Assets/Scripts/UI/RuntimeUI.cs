@@ -14,6 +14,7 @@ public class RuntimeUI : MonoBehaviour
     {
         Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselected;
+        Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
     }
 
     private void Start()
@@ -26,6 +27,7 @@ public class RuntimeUI : MonoBehaviour
     {
         Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselected;
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
     }
 
     private void HandleUnitSelected(UnitSelectedEvent evt)
@@ -47,25 +49,36 @@ public class RuntimeUI : MonoBehaviour
         if (evt.Unit is AbstractCommandable commandable)
         {
             selectedUnits.Remove(commandable);
-           
-            if (selectedUnits.Count > 0)
-            {
-                actionsUI.EnableFor(selectedUnits);
 
-                if (selectedUnits.Count == 1 && selectedUnits.First() is BaseBuilding building)
-                {
-                    buildingBuildingUI.EnableFor(building);
-                }
-                else
-                {
-                    buildingBuildingUI.Disable();
-                }
+            RefreshUI();
+        }
+    }
+
+    private void RefreshUI()
+    {
+        if (selectedUnits.Count > 0)
+        {
+            actionsUI.EnableFor(selectedUnits);
+
+            if (selectedUnits.Count == 1 && selectedUnits.First() is BaseBuilding building)
+            {
+                buildingBuildingUI.EnableFor(building);
             }
             else
             {
-                actionsUI.Disable();
                 buildingBuildingUI.Disable();
             }
         }
+        else
+        {
+            actionsUI.Disable();
+            buildingBuildingUI.Disable();
+        }
+    }
+
+    private void HandleUnitDeath(UnitDeathEvent evt)
+    {
+        selectedUnits.Remove(evt.Unit);
+        RefreshUI();
     }
 }

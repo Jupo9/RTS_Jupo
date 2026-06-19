@@ -48,6 +48,7 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent += HandleUnitSpawn;
         Bus<ActionSelectedEvent>.OnEvent += HandleActionSelected;
+        Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
     }
 
     private void OnDestroy()
@@ -56,7 +57,7 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent -= HandleUnitSpawn;
         Bus<ActionSelectedEvent>.OnEvent -= HandleActionSelected;
-
+        Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
     }
 
     /* alternative version:
@@ -86,6 +87,12 @@ public class PlayerInput : MonoBehaviour
         {
             ghostInstance = Instantiate(activeAction.GhostPrefab);
         }
+    }
+
+    private void HandleUnitDeath(UnitDeathEvent evt)
+    {
+        selectedUnits.Remove(evt.Unit);
+        aliveUnits.Remove(evt.Unit);
     }
 
     private void Update()

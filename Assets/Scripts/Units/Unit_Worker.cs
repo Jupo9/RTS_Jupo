@@ -1,3 +1,5 @@
+using System;
+using Unity.AppUI.UI;
 using Unity.Behavior;
 using UnityEngine;
 
@@ -15,6 +17,8 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
             return false;
         }
     }
+
+    [SerializeField] private BaseAction CancelBuildingCommand; 
 
     protected override void Start()
     {
@@ -56,7 +60,28 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         graphAgent.SetVariableValue("Ghost", instance);
         graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
 
+        SetCommandOverrides(new BaseAction[] { CancelBuildingCommand });
+        Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
+
         return instance;
+    }
+
+    public void CancelBuilding()
+    {
+
+        if (graphAgent.GetVariable("Ghost", out BlackboardVariable<GameObject> ghostVariable)
+            && ghostVariable.Value != null)
+        {
+            Destroy(ghostVariable.Value);
+        }
+        if (graphAgent.GetVariable("BuildingUnderConstruction", out BlackboardVariable<BaseBuilding> buildingVariable)
+            && buildingVariable.Value != null)
+        {
+            Destroy(buildingVariable.Value.gameObject);
+        }
+
+        SetCommandOverrides(Array.Empty<BaseAction>());
+        Stop();
     }
 
     private void HandleGatherSupplies(GameObject self, int amount, SupplySO supply)

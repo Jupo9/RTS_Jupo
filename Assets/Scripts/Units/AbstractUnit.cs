@@ -35,4 +35,9 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable
     {
         graphAgent.SetVariableValue("Command", UnitCommands.Stop);
     }
+
+    private void OnDestroy()
+    {
+        Bus<UnitDeathEvent>.Raise(new UnitDeathEvent(this));
+    }
 }
