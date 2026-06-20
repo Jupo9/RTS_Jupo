@@ -11,20 +11,22 @@ public class BaseBuilding : AbstractCommandable
     [field: SerializeField] public float CurrentQueueStartTime { get; private set; }
     [field: SerializeField] public AbstractUnitSO BuildingUnit { get; private set; }
     [field: SerializeField] public MeshRenderer MainRenderer { get; private set; }
+    [field: SerializeField] public BuildingProgress Progress { get; private set; } = new (BuildingProgress.BuildingState.Destroyed, 0, 0);
+    [field: SerializeField] public BuildingSO BuildingSO { get; private set; }
 
     [SerializeField] private Material primaryMaterial;
-    [SerializeField] private NavMeshObstacle navMeshObstacle; 
+    [SerializeField] private NavMeshObstacle navMeshObstacle;
 
     public delegate void QueueUpdatedEvent(AbstractUnitSO[] unitsInQueue);
     public event QueueUpdatedEvent OnQueueUpdated;
 
-    private BuildingSO buildingSO;
     private List<AbstractUnitSO> buildingQueue = new (MAX_QUEUE_SIZE);
     private const int MAX_QUEUE_SIZE = 5;
+    private IBuildingBuilder unitBuildingThis;
 
     private void Awake()
     {
-        buildingSO = UnitSO as BuildingSO;
+        BuildingSO = UnitSO as BuildingSO;
     }
 
     protected override void Start()
@@ -35,6 +37,10 @@ public class BaseBuilding : AbstractCommandable
         { 
             MainRenderer.material = primaryMaterial;
         }
+
+        Progress = new BuildingProgress(BuildingProgress.BuildingState.Completed, Progress.StartTime, 1);
+        unitBuildingThis = null;
+        Bus <UnitDeathEvent>.OnEvent -= HandleUnitDeath;
     }
 
     public void BuildUnit(AbstractUnitSO unit)
@@ -86,9 +92,33 @@ public class BaseBuilding : AbstractCommandable
         }
     }
 
-    public void ShowGhostVisuals()
+    public void StartBuilding(IBuildingBuilder buildingBuilder)
     {
-        MainRenderer.material = buildingSO.PlacementMaterial;
+        unitBuildingThis = buildingBuilder;
+        MainRenderer.material = BuildingSO.PlacementMaterial;
+
+        Progress = new BuildingProgress(
+            BuildingProgress.BuildingState.Building,
+            Time.time - BuildingSO.BuildTime * Progress.Progress,
+            Progress.Progress
+            );
+
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+        Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
+    }
+
+    private void HandleUnitDeath(UnitDeathEvent evt)
+    {
+        if (evt.Unit.TryGetComponent(out IBuildingBuilder buildingBuilder) && buildingBuilder == unitBuildingThis)
+        {
+            Progress = new BuildingProgress(
+                BuildingProgress.BuildingState.Paused,
+                Progress.StartTime,
+                (Time.time - Progress.StartTime) / BuildingSO.BuildTime
+                ); 
+        }
+
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
     }
 
     private IEnumerator DoBuildUnits()
@@ -106,5 +136,10 @@ public class BaseBuilding : AbstractCommandable
         }
 
         OnQueueUpdated?.Invoke(buildingQueue.ToArray());
+    }
+
+    private void OnDestroy()
+    {
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
     }
 }

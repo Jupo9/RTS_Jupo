@@ -71,9 +71,9 @@ GameObject:
   - component: {fileID: 4078631732461238711}
   - component: {fileID: 8980997614320244810}
   - component: {fileID: 8676531945322240151}
-  - component: {fileID: 2313135209425577197}
   - component: {fileID: 1950760683771908850}
-  - component: {fileID: 136911381373588490}
+  - component: {fileID: -5177613702770620956}
+  - component: {fileID: 1447191940532501056}
   m_Layer: 6
   m_Name: Worker
   m_TagString: Untagged
@@ -142,28 +142,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2313135209425577197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6510919576379171628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39b4fc99c9998f468f3035849d2b1b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Unit_Worker
-  <CurrentHealth>k__BackingField: 0
-  <MaxHealth>k__BackingField: 0
-  <AvailableCommands>k__BackingField:
-  - {fileID: 11400000, guid: 547e90b69a49d19488d071dbb275903e, type: 2}
-  - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
-  - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
-  - {fileID: 11400000, guid: 627f6e3e652a7924786e5727990280fa, type: 2}
-  <UnitSO>k__BackingField: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}
-  decalProjector: {fileID: 6948966561873918116}
-  CancelBuildingCommand: {fileID: 11400000, guid: 8fc8e763a95fc684dabc1fc708f86f13, type: 2}
 --- !u!136 &1950760683771908850
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -187,7 +165,29 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &136911381373588490
+--- !u!114 &-5177613702770620956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6510919576379171628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f39b4fc99c9998f468f3035849d2b1b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit_Worker
+  <CurrentHealth>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <AvailableCommands>k__BackingField:
+  - {fileID: 11400000, guid: 547e90b69a49d19488d071dbb275903e, type: 2}
+  - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
+  - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
+  - {fileID: 11400000, guid: 627f6e3e652a7924786e5727990280fa, type: 2}
+  <UnitSO>k__BackingField: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}
+  decalProjector: {fileID: 6948966561873918116}
+  CancelBuildingCommand: {fileID: 11400000, guid: 8fc8e763a95fc684dabc1fc708f86f13, type: 2}
+--- !u!114 &1447191940532501056
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,23 +201,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
   m_Graph: {fileID: -1757046916387414480, guid: d9f01b9ac17ba6d4d89b919cfa0dfd4d, type: 2}
   m_BlackboardVariableOverridesList:
-  - rid: 2758986108267135046
-  - rid: 2638616926563074140
-  m_OriginalGraph: {fileID: -1757046916387414480, guid: d9f01b9ac17ba6d4d89b919cfa0dfd4d, type: 2}
+  - rid: 2638617267074760891
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
-    - rid: 2638616926563074140
-      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 7935959769932579410
-          m_Value1: 12651081415473138569
-        Name: SupplyAmountHeld
-        m_Value: 0
-    - rid: 2758986108267135046
+    - rid: 2638617267074760891
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:

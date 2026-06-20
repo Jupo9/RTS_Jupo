@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AppUI.UI;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -284,11 +286,7 @@ public class PlayerInput : MonoBehaviour
         for (int i = 0; i < abstractCommandables.Count; i++)
         {
             CommandContext context = new(abstractCommandables[i], hit, i);
-
-            if (activeAction.CanHandle(context))
-            { 
-                activeAction.Handle(context);
-            }
+            activeAction.Handle(context);
         }
 
         activeAction = null;
@@ -343,7 +341,7 @@ public class PlayerInput : MonoBehaviour
             {
                 CommandContext context = new(abstractUnits[i], hit, i);
 
-                foreach (ICommand command in abstractUnits[i].AvailableCommands)
+                foreach (ICommand command in GetAvailableCommands(abstractUnits[i]))
                 {
                     if (command.CanHandle(context))
                     {
@@ -353,6 +351,29 @@ public class PlayerInput : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    private List<BaseAction> GetAvailableCommands(AbstractUnit unit)
+    {
+        OverrideCommandsCommand[] overrideCommandsCommands = unit.AvailableCommands
+            .Where(command => command is OverrideCommandsCommand)
+            .Cast<OverrideCommandsCommand>()
+            .ToArray();
+
+        List<BaseAction> allAvailableCommands = new();
+        foreach (OverrideCommandsCommand overrideCommand in overrideCommandsCommands)
+        {
+            allAvailableCommands.AddRange(overrideCommand.Commands
+                .Where(command => command is not OverrideCommandsCommand)
+            );
+        }
+
+        allAvailableCommands.AddRange(unit.AvailableCommands
+            .Where(command => command is not OverrideCommandsCommand)
+        );
+
+        return allAvailableCommands;
     }
 
     private void HandleDragSelect()

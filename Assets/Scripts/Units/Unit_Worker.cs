@@ -45,11 +45,7 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
     public GameObject Build(BuildingSO building, Vector3 targetLocation)
     {
         GameObject instance = Instantiate(building.Prefab, targetLocation, Quaternion.identity);
-        if (instance.TryGetComponent(out BaseBuilding baseBuilding))
-        {
-            baseBuilding.ShowGhostVisuals();
-        }
-        else
+        if (!instance.TryGetComponent(out BaseBuilding _))
         {
             Debug.LogError($"Missing BaseBuilding on Prefab for BuildingSO \"{building.name}\"! Connat build!");
             return null;
@@ -64,6 +60,18 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
 
         return instance;
+    }
+
+    public void ResumeBuilding(BaseBuilding building)
+    {
+        graphAgent.SetVariableValue("TargetLocation", building.transform.position);
+        graphAgent.SetVariableValue("BuildingUnderConstruction", building);
+        graphAgent.SetVariableValue("BuildingSO", building.BuildingSO);
+        graphAgent.SetVariableValue<GameObject>("Ghost", null);
+        graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
+
+        SetCommandOverrides(new BaseAction[] { CancelBuildingCommand });
+        Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
     }
 
     public void CancelBuilding()
