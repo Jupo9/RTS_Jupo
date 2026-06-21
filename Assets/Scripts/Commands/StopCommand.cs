@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Stop Action", menuName = "Units/Commands/Stop", order = 101)]
-public class StopCommand : BaseAction
+public class StopCommand : BaseCommand
 {
     public override bool CanHandle(CommandContext context)
     {
@@ -13,4 +13,6 @@ public class StopCommand : BaseAction
         AbstractUnit unit = (AbstractUnit)context.Commandable;
         unit.Stop();
     }
+
+    public override bool IsLocked(CommandContext context) => false;
 }

@@ -1583,6 +1583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Supply Hut
       objectReference: {fileID: 0}
+    - target: {fileID: 6964012305514025925, guid: 60174e2531fe1794a81f4a279e17f61d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4472,6 +4476,10 @@ MonoBehaviour:
     <ZoomSpeed>k__BackingField: 1
     <RotationSpeed>k__BackingField: 1
     <MinZoomDistance>k__BackingField: 7.5
+  errorTintColor: {r: 1, g: 0, b: 0, a: 1}
+  errorFresnelColor: {r: 4, g: 1.7, b: 0, a: 2}
+  availableToPlaceTintColor: {r: 0.2, g: 1.65, b: 1, a: 2}
+  availableToPlaceFresnelColor: {r: 4, g: 1.7, b: 0, a: 2}
 --- !u!1001 &332197402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23191,6 +23199,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5827066523746683823, guid: 0769b0d4430bf10488837724577a9cde, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5860653275703972011, guid: 0769b0d4430bf10488837724577a9cde, type: 3}
       propertyPath: decalProjector
       value: 
@@ -25373,6 +25385,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4909576315737668612, guid: 43943267dde60fe4a88cf5bd885c00e3, type: 3}
+      propertyPath: <BuildingUnit>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}
     - target: {fileID: 6018277380246554126, guid: 43943267dde60fe4a88cf5bd885c00e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.87

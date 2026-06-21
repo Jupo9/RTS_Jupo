@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class UIActionButton : MonoBehaviour, IUIElement<BaseAction, UnityAction>
+public class UIActionButton : MonoBehaviour, IUIElement<BaseCommand, UnityAction>
 {
     [SerializeField] private Image icon;
 
@@ -15,11 +15,11 @@ public class UIActionButton : MonoBehaviour, IUIElement<BaseAction, UnityAction>
         Disable();
     }
 
-    public void EnableFor(BaseAction action, UnityAction onClick)
+    public void EnableFor(BaseCommand action, UnityAction onClick)
     {
         button.onClick.RemoveAllListeners();
         SetIcon(action.Icon);
-        button.interactable = true;
+        button.interactable = !action.IsLocked(new CommandContext(null, new RaycastHit(), 0));
         button.onClick.AddListener(onClick);
     }
 

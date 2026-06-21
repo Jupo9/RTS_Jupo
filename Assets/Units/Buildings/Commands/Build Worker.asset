@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Build Worker
   m_EditorClassIdentifier: Assembly-CSharp::BuildUnitCommand
   <Icon>k__BackingField: {fileID: 21300000, guid: 6e40afd6361ffe44a87846d98dd04e7c, type: 3}
-  <RequiresClockToActive>k__BackingField: 0
+  <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 0
+  <GhostPrefab>k__BackingField: {fileID: 0}
+  <Restrictions>k__BackingField: []
   <Unit>k__BackingField: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}

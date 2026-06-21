@@ -18,7 +18,7 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         }
     }
 
-    [SerializeField] private BaseAction CancelBuildingCommand; 
+    [SerializeField] private BaseCommand CancelBuildingCommand; 
 
     protected override void Start()
     {
@@ -45,19 +45,22 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
     public GameObject Build(BuildingSO building, Vector3 targetLocation)
     {
         GameObject instance = Instantiate(building.Prefab, targetLocation, Quaternion.identity);
-        if (!instance.TryGetComponent(out BaseBuilding _))
+        if (!instance.TryGetComponent(out BaseBuilding baseBuilding))
         {
             Debug.LogError($"Missing BaseBuilding on Prefab for BuildingSO \"{building.name}\"! Connat build!");
             return null;
         }
 
+        graphAgent.SetVariableValue("BuildingUnderConstruction", baseBuilding);     //for refund supplies if the building is canceled
         graphAgent.SetVariableValue("BuildingSO", building);
         graphAgent.SetVariableValue("TargetLocation", targetLocation);
         graphAgent.SetVariableValue("Ghost", instance);
         graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
 
-        SetCommandOverrides(new BaseAction[] { CancelBuildingCommand });
+        SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
         Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
+        Bus<SupplyEvent>.Raise(new SupplyEvent(-building.Cost.Minerals, building.Cost.MineralsSO));
+        Bus<SupplyEvent>.Raise(new SupplyEvent(-building.Cost.Gas, building.Cost.GasSO));
 
         return instance;
     }
@@ -70,13 +73,12 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         graphAgent.SetVariableValue<GameObject>("Ghost", null);
         graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
 
-        SetCommandOverrides(new BaseAction[] { CancelBuildingCommand });
+        SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
         Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
     }
 
     public void CancelBuilding()
     {
-
         if (graphAgent.GetVariable("Ghost", out BlackboardVariable<GameObject> ghostVariable)
             && ghostVariable.Value != null)
         {
@@ -86,9 +88,19 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
             && buildingVariable.Value != null)
         {
             Destroy(buildingVariable.Value.gameObject);
+
+            BuildingSO buildingSO = buildingVariable.Value.BuildingSO;
+            Bus<SupplyEvent>.Raise(new SupplyEvent(
+                Mathf.FloorToInt(0.75f * buildingSO.Cost.Minerals),
+                buildingSO.Cost.MineralsSO
+            ));
+            Bus<SupplyEvent>.Raise(new SupplyEvent(
+                Mathf.FloorToInt(0.75f * buildingSO.Cost.Gas),
+                buildingSO.Cost.GasSO
+            ));
         }
 
-        SetCommandOverrides(Array.Empty<BaseAction>());
+        SetCommandOverrides(Array.Empty<BaseCommand>());
         Stop();
     }
 

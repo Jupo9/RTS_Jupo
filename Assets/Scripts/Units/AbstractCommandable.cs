@@ -6,12 +6,12 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
 {
     [field: SerializeField] public int CurrentHealth { get; private set; }
     [field: SerializeField] public int MaxHealth { get; private set; }
-    [field: SerializeField] public BaseAction[] AvailableCommands { get; private set; }
+    [field: SerializeField] public BaseCommand[] AvailableCommands { get; private set; }
     [field: SerializeField] public AbstractUnitSO UnitSO { get; private set; }
 
     [SerializeField] private DecalProjector decalProjector;
 
-    private BaseAction[] initialCommands;
+    private BaseCommand[] initialCommands;
 
     protected virtual void Start()
     {
@@ -43,7 +43,7 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
         Bus<UnitDeselectEvent>.Raise(new UnitDeselectEvent(this));
     }
 
-    public void SetCommandOverrides(BaseAction[] commands)
+    public void SetCommandOverrides(BaseCommand[] commands)
     {
         if (commands == null || commands.Length == 0)
         {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Gather Action", menuName = "Units/Commands/Gather", order = 105)]
-public class GatherCommands : BaseAction
+public class GatherCommands : BaseCommand
 {
     [SerializeField] private AbstractUnitSO commandPostSO;
 
@@ -28,6 +28,8 @@ public class GatherCommands : BaseAction
             worker.MoveTo(context.Hit.collider.gameObject.transform.position);
         }
     }
+
+    public override bool IsLocked(CommandContext context) => false;
 
     private bool isGatherableSupplyOrCommandPost(Collider collider) => collider.TryGetComponent(out GatherableSupply _) || IsCommandPost(collider);
     private bool IsCommandPost(Collider collider) => collider.TryGetComponent(out BaseBuilding building) && building.UnitSO.Equals(commandPostSO);

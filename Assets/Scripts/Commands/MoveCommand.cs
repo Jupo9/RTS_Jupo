@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Move Action", menuName = "Units/Commands/Move", order = 100)]
-public class MoveCommand : BaseAction
+public class MoveCommand : BaseCommand
 {
     [SerializeField] private float radiusMultiplier = 3.5f;
     private int unitsOnLayer = 0;
@@ -43,4 +43,6 @@ public class MoveCommand : BaseAction
             radialOffset = 2 * Mathf.PI / maxUnitsOnLayer;
         }
     }
+
+    public override bool IsLocked(CommandContext context) => false;
 }

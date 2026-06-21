@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Cancel Building", menuName = "Units/Commands/Cancel Building")]
-public class CancelBuildingCommand : BaseAction
+public class CancelBuildingCommand : BaseCommand
 {
     public override bool CanHandle(CommandContext context)
     {
@@ -13,4 +13,6 @@ public class CancelBuildingCommand : BaseAction
         IBuildingBuilder buildingBuilder = context.Commandable as IBuildingBuilder;
         buildingBuilder.CancelBuilding();
     }
+
+    public override bool IsLocked(CommandContext context) => false;
 }

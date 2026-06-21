@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,9 +19,10 @@ public class BaseBuilding : AbstractCommandable
     public delegate void QueueUpdatedEvent(AbstractUnitSO[] unitsInQueue);
     public event QueueUpdatedEvent OnQueueUpdated;
 
+    private IBuildingBuilder unitBuildingThis;
     private List<AbstractUnitSO> buildingQueue = new (MAX_QUEUE_SIZE);
     private const int MAX_QUEUE_SIZE = 5;
-    private IBuildingBuilder unitBuildingThis;
+
 
     private void Awake()
     {
@@ -51,10 +51,15 @@ public class BaseBuilding : AbstractCommandable
             return;
         }
 
+
+        Bus<SupplyEvent>.Raise(new SupplyEvent(-unit.Cost.Minerals, unit.Cost.MineralsSO));
+        Bus<SupplyEvent>.Raise(new SupplyEvent(-unit.Cost.Gas, unit.Cost.GasSO));
+
         buildingQueue.Add(unit);
 
+
         if (buildingQueue.Count == 1)
-        { 
+        {
             StartCoroutine(DoBuildUnits());
         }
         else
@@ -71,6 +76,9 @@ public class BaseBuilding : AbstractCommandable
             return;
         }
 
+        AbstractUnitSO unitSO = buildingQueue[index];
+        Bus<SupplyEvent>.Raise(new SupplyEvent(unitSO.Cost.Minerals, unitSO.Cost.MineralsSO));
+        Bus<SupplyEvent>.Raise(new SupplyEvent(unitSO.Cost.Gas, unitSO.Cost.GasSO));
         buildingQueue.RemoveAt(index);
 
         if (index == 0)

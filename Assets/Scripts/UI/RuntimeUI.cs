@@ -15,6 +15,7 @@ public class RuntimeUI : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselected;
         Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
+        Bus<SupplyEvent>.OnEvent += HandleSupplyChange;
     }
 
     private void Start()
@@ -28,6 +29,7 @@ public class RuntimeUI : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselected;
         Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+        Bus<SupplyEvent>.OnEvent -= HandleSupplyChange;
     }
 
     private void HandleUnitSelected(UnitSelectedEvent evt)
@@ -80,5 +82,10 @@ public class RuntimeUI : MonoBehaviour
     {
         selectedUnits.Remove(evt.Unit);
         RefreshUI();
+    }
+
+    private void HandleSupplyChange(SupplyEvent evt)
+    {
+        actionsUI.EnableFor(selectedUnits);
     }
 }

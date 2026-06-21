@@ -19,10 +19,20 @@ public class PlayerInput : MonoBehaviour
     //Script for reference to camera configuration
     [SerializeField] private CameraConfig cameraConfig;
 
+    [SerializeField][ColorUsage(showAlpha: true, hdr: true)] 
+    private Color errorTintColor = Color.red;
+    [SerializeField][ColorUsage(showAlpha: true, hdr: true)] 
+    private Color errorFresnelColor = new(4, 1.7f, 0, 2);
+    [SerializeField][ColorUsage(showAlpha: true, hdr: true)] 
+    private Color availableToPlaceTintColor = new(0.2f, 1.65f, 1, 2);
+    [SerializeField][ColorUsage(showAlpha: true, hdr: true)] 
+    private Color availableToPlaceFresnelColor = new(4, 1.7f, 0, 2);
+
     private Vector2 startingMousePosition;
 
-    private BaseAction activeAction;
+    private BaseCommand activeCommand;
     private GameObject ghostInstance;
+    private MeshRenderer ghostRenderer;
     private bool wasMouseDownOnUI;
     private CinemachineFollow cinemachineFollow;
     private float zoomStartTime;
@@ -33,7 +43,8 @@ public class PlayerInput : MonoBehaviour
     private HashSet<AbstractUnit> addedUnits = new(24);
     private List<ISelectable> selectedUnits = new(12);
 
-
+    private static readonly int TINT = Shader.PropertyToID("_Tint");
+    private static readonly int FRESNEL = Shader.PropertyToID("_FresnelColor");
 
     private void Awake()
     {
@@ -49,7 +60,7 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent += HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent += HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent += HandleUnitSpawn;
-        Bus<ActionSelectedEvent>.OnEvent += HandleActionSelected;
+        Bus<CommandSelectedEvent>.OnEvent += HandleActionSelected;
         Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
     }
 
@@ -58,8 +69,8 @@ public class PlayerInput : MonoBehaviour
         Bus<UnitSelectedEvent>.OnEvent -= HandleUnitSelected;
         Bus<UnitDeselectEvent>.OnEvent -= HandleUnitDeselect;
         Bus<UnitSpawnEvent>.OnEvent -= HandleUnitSpawn;
-        Bus<ActionSelectedEvent>.OnEvent -= HandleActionSelected;
-        Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
+        Bus<CommandSelectedEvent>.OnEvent -= HandleActionSelected;
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
     }
 
     /* alternative version:
@@ -77,17 +88,18 @@ public class PlayerInput : MonoBehaviour
     }
     private void HandleUnitDeselect(UnitDeselectEvent evt) => selectedUnits.Remove(evt.Unit);
     private void HandleUnitSpawn(UnitSpawnEvent evt) => aliveUnits.Add(evt.Unit);
-    private void HandleActionSelected(ActionSelectedEvent evt)
+    private void HandleActionSelected(CommandSelectedEvent evt)
     {
-        activeAction = evt.Action;
-        if (!activeAction.RequiresClickToActive)
+        activeCommand = evt.Command;
+        if (!activeCommand.RequiresClickToActive)
         {
             // immediately handle the action
             ActivateAction(new RaycastHit());
         }
-        else if (activeAction.GhostPrefab != null)
+        else if (activeCommand.GhostPrefab != null)
         {
-            ghostInstance = Instantiate(activeAction.GhostPrefab);
+            ghostInstance = Instantiate(activeCommand.GhostPrefab);
+            ghostRenderer = ghostInstance.GetComponentInChildren<MeshRenderer>();
         }
     }
 
@@ -256,13 +268,13 @@ public class PlayerInput : MonoBehaviour
 
         Ray cameraRay = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (activeAction == null
+        if (activeCommand == null
             && Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, selectableUnitsLayers)
             && hit.collider.TryGetComponent(out ISelectable selectable))
         {
             selectable.Select();
         }
-        else if (activeAction != null
+        else if (activeCommand != null
             && !EventSystem.current.IsPointerOverGameObject()
             && Physics.Raycast(cameraRay, out hit, float.MaxValue, interactableLayers | floorLayers))
         {
@@ -286,10 +298,10 @@ public class PlayerInput : MonoBehaviour
         for (int i = 0; i < abstractCommandables.Count; i++)
         {
             CommandContext context = new(abstractCommandables[i], hit, i);
-            activeAction.Handle(context);
+            activeCommand.Handle(context);
         }
 
-        activeAction = null;
+        activeCommand = null;
     }
 
     private void HandleGhost()
@@ -303,7 +315,7 @@ public class PlayerInput : MonoBehaviour
         {
             Destroy(ghostInstance);
             ghostInstance = null;
-            activeAction = null;
+            activeCommand = null;
             return;
         }
 
@@ -311,6 +323,9 @@ public class PlayerInput : MonoBehaviour
         if (Physics.Raycast(cameraRay, out RaycastHit hit, float.MaxValue, floorLayers))
         {
             ghostInstance.transform.position = hit.point;
+            bool allRestrictionsPass = activeCommand.AllRestrictionsPass(hit.point);
+            ghostRenderer.material.SetColor(TINT, allRestrictionsPass ? availableToPlaceTintColor : errorTintColor);
+            ghostRenderer.material.SetColor(FRESNEL, allRestrictionsPass ? availableToPlaceFresnelColor : errorFresnelColor);
         }
 
     }
@@ -354,14 +369,14 @@ public class PlayerInput : MonoBehaviour
     }
 
 
-    private List<BaseAction> GetAvailableCommands(AbstractUnit unit)
+    private List<BaseCommand> GetAvailableCommands(AbstractUnit unit)
     {
         OverrideCommandsCommand[] overrideCommandsCommands = unit.AvailableCommands
             .Where(command => command is OverrideCommandsCommand)
             .Cast<OverrideCommandsCommand>()
             .ToArray();
 
-        List<BaseAction> allAvailableCommands = new();
+        List<BaseCommand> allAvailableCommands = new();
         foreach (OverrideCommandsCommand overrideCommand in overrideCommandsCommands)
         {
             allAvailableCommands.AddRange(overrideCommand.Commands
@@ -409,7 +424,7 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseDrag()
     {
-        if (activeAction != null || wasMouseDownOnUI)
+        if (activeCommand != null || wasMouseDownOnUI)
         {
             return;
         }
@@ -430,7 +445,7 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseUp()
     {
-        if (!wasMouseDownOnUI && activeAction == null && !Keyboard.current.shiftKey.isPressed)
+        if (!wasMouseDownOnUI && activeCommand == null && !Keyboard.current.shiftKey.isPressed)
         {
             DeselectAllUnits();
         }

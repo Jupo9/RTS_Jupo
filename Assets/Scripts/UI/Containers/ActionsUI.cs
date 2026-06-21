@@ -23,7 +23,7 @@ public class ActionsUI : MonoBehaviour, IUIElement<HashSet<AbstractCommandable>>
 
     private void RefreshButtons(HashSet<AbstractCommandable> selectedUnits)
     {
-        HashSet<BaseAction> availableCommands = new(9);
+        HashSet<BaseCommand> availableCommands = new(9);
 
         foreach (AbstractCommandable commandable in selectedUnits)
         {
@@ -32,7 +32,7 @@ public class ActionsUI : MonoBehaviour, IUIElement<HashSet<AbstractCommandable>>
 
         for (int i = 0; i < actionButtons.Length; i++)
         {
-            BaseAction actionForSlot = availableCommands.Where(action => action.Slot == i).FirstOrDefault();
+            BaseCommand actionForSlot = availableCommands.Where(action => action.Slot == i).FirstOrDefault();
 
             if (actionForSlot != null)
             {
@@ -45,8 +45,8 @@ public class ActionsUI : MonoBehaviour, IUIElement<HashSet<AbstractCommandable>>
         }
     }
 
-    private UnityAction HandleClick(BaseAction action)
+    private UnityAction HandleClick(BaseCommand action)
     {
-        return () => Bus<ActionSelectedEvent>.Raise(new ActionSelectedEvent(action));
+        return () => Bus<CommandSelectedEvent>.Raise(new CommandSelectedEvent(action));
     }
 }

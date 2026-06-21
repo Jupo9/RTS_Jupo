@@ -1,7 +1,8 @@
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Build Building", menuName = "Units/Commands/Build Building")]
-public class BuildBuildingCommand : BaseAction
+public class BuildBuildingCommand : BaseCommand
 {
     [field: SerializeField] public BuildingSO Building { get; private set; }
 
@@ -19,7 +20,7 @@ public class BuildBuildingCommand : BaseAction
                 );
         }
 
-        return true;
+        return HasEnoughSupplies() && AllRestrictionsPass(context.Hit.point);
     }
 
     public override void Handle(CommandContext context)
@@ -30,9 +31,13 @@ public class BuildBuildingCommand : BaseAction
         {
             builder.ResumeBuilding(building);
         }
-        else
+        else if (HasEnoughSupplies() && AllRestrictionsPass(context.Hit.point))
         {
             builder.Build(Building, context.Hit.point);
         }
     }
+
+    public override bool IsLocked(CommandContext context) => !HasEnoughSupplies();
+
+    private bool HasEnoughSupplies() => Building.Cost.Minerals <= Supplies.Minerals && Building.Cost.Gas <= Supplies.Gas;
 }
