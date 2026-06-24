@@ -27,6 +27,7 @@ public class BaseBuilding : AbstractCommandable
     private void Awake()
     {
         BuildingSO = UnitSO as BuildingSO;
+        MaxHealth = BuildingSO.Health;
     }
 
     protected override void Start()
@@ -40,7 +41,8 @@ public class BaseBuilding : AbstractCommandable
 
         Progress = new BuildingProgress(BuildingProgress.BuildingState.Completed, Progress.StartTime, 1);
         unitBuildingThis = null;
-        Bus <UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+        Bus<BuildingSpawnEvent>.Raise(new BuildingSpawnEvent(this));
     }
 
     public void BuildUnit(AbstractUnitSO unit)
@@ -102,6 +104,8 @@ public class BaseBuilding : AbstractCommandable
 
     public void StartBuilding(IBuildingBuilder buildingBuilder)
     {
+        Awake();
+
         unitBuildingThis = buildingBuilder;
         MainRenderer.material = BuildingSO.PlacementMaterial;
 
@@ -110,6 +114,11 @@ public class BaseBuilding : AbstractCommandable
             Time.time - BuildingSO.BuildTime * Progress.Progress,
             Progress.Progress
             );
+
+        if (Progress.Progress == 0)
+        {
+            Heal(1);
+        }
 
         Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
         Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;

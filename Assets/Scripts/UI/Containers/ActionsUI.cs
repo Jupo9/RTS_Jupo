@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -27,7 +28,10 @@ public class ActionsUI : MonoBehaviour, IUIElement<HashSet<AbstractCommandable>>
 
         foreach (AbstractCommandable commandable in selectedUnits)
         {
-            availableCommands.UnionWith(commandable.AvailableCommands);
+            if (commandable.AvailableCommands != null)
+            {
+                availableCommands.AddRange(commandable.AvailableCommands);
+            }
         }
 
         for (int i = 0; i < actionButtons.Length; i++)

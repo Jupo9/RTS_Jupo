@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec45190001172e4099ec7acc7f3ebee, type: 3}
   m_Name: Build Air Transport
   m_EditorClassIdentifier: Assembly-CSharp::BuildUnitCommand
+  <Name>k__BackingField: Air Transport
   <Icon>k__BackingField: {fileID: 21300000, guid: 4d0944a6c62020d4f955f5b7174bb96f, type: 3}
   <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 0

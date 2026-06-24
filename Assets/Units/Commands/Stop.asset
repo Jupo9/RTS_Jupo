@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 759b028d30bffc142bb184ba06ea7cab, type: 3}
-  m_Name: Stop Action
+  m_Name: Stop
   m_EditorClassIdentifier: Assembly-CSharp::StopCommand
+  <Name>k__BackingField: Stop
   <Icon>k__BackingField: {fileID: 21300000, guid: af5afbd56621f394b8d6017ebda9401e, type: 3}
   <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 1
+  <GhostPrefab>k__BackingField: {fileID: 0}
+  <Restrictions>k__BackingField: []

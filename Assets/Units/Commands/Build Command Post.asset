@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e81a43705d1e1a4cbf50a2b4b858fec, type: 3}
-  m_Name: Build Command Post Action
+  m_Name: Build Command Post
   m_EditorClassIdentifier: Assembly-CSharp::BuildBuildingCommand
+  <Name>k__BackingField: Command Post
   <Icon>k__BackingField: {fileID: 21300000, guid: dfebbdf93f58d764ab9aa4d54edd629e, type: 3}
   <RequiresClickToActive>k__BackingField: 1
   <Slot>k__BackingField: 0

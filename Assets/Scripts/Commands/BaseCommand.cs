@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class BaseCommand : ScriptableObject, ICommand
 {
+    [field: SerializeField] public string Name { get; private set; } = "Command";
     [field: SerializeField] public Sprite Icon { get; private set; }
     [field: SerializeField] public bool RequiresClickToActive { get; private set; } = true;
     [field: Range(0, 8)][field: SerializeField] public int Slot { get; private set; }

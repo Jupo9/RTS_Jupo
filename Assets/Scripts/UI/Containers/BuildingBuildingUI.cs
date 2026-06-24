@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BuildingBuilidingUI : MonoBehaviour, IUIElement<BaseBuilding>
+public class BuildingBuildingUI : MonoBehaviour, IUIElement<BaseBuilding>
 {
     [SerializeField] private UIBuildQueueButton[] unitButtons;
     [SerializeField] private ProgressBar progressBar;
@@ -56,7 +56,10 @@ public class BuildingBuilidingUI : MonoBehaviour, IUIElement<BaseBuilding>
            buildCoroutine = StartCoroutine(UpdateUnitProgress());
         }
 
-        SetupUnitButtons();
+        if (building != null)
+        {
+            SetupUnitButtons();
+        }
     }
 
     private IEnumerator UpdateUnitProgress()

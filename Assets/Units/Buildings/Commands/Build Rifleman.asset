@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec45190001172e4099ec7acc7f3ebee, type: 3}
   m_Name: Build Rifleman
   m_EditorClassIdentifier: Assembly-CSharp::BuildUnitCommand
+  <Name>k__BackingField: Rifleman
   <Icon>k__BackingField: {fileID: 21300000, guid: 44214f5ac3bd91f449743d6968d0d116, type: 3}
   <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 0

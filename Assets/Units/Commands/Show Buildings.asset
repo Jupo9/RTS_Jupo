@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3806af1a70f24b40ab9f7039c263be1, type: 3}
-  m_Name: Show Buildings Action
+  m_Name: Show Buildings
   m_EditorClassIdentifier: Assembly-CSharp::OverrideCommandsCommand
+  <Name>k__BackingField: Build
   <Icon>k__BackingField: {fileID: 21300000, guid: a5df28aa58ab6264bb16fe1e21c4e327, type: 3}
   <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 6
   <GhostPrefab>k__BackingField: {fileID: 0}
+  <Restrictions>k__BackingField: []
   <Commands>k__BackingField:
   - {fileID: 11400000, guid: bd0b54681056b51468692113c11e2502, type: 2}
   - {fileID: 11400000, guid: c091dfc41cda83d4b93253c978e1046e, type: 2}
