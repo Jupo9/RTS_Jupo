@@ -14,10 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OverrideCommandsCommand
   <Name>k__BackingField: Build
   <Icon>k__BackingField: {fileID: 21300000, guid: a5df28aa58ab6264bb16fe1e21c4e327, type: 3}
+  <IsSingleUnitCommand>k__BackingField: 0
   <RequiresClickToActive>k__BackingField: 0
   <Slot>k__BackingField: 6
   <GhostPrefab>k__BackingField: {fileID: 0}
   <Restrictions>k__BackingField: []
   <Commands>k__BackingField:
   - {fileID: 11400000, guid: bd0b54681056b51468692113c11e2502, type: 2}
+  - {fileID: 11400000, guid: f439d9d5cef00064fa022a6cf8a88193, type: 2}
+  - {fileID: 11400000, guid: 52c62e546ccc88d49a04577fb61f13d3, type: 2}
+  - {fileID: 11400000, guid: badcbe8f3ba70a84cbab0c45255bb11f, type: 2}
+  - {fileID: 11400000, guid: 0ef1900a068c41e44a22b2e4c0474f91, type: 2}
   - {fileID: 11400000, guid: c091dfc41cda83d4b93253c978e1046e, type: 2}

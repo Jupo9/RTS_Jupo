@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.AppUI.UI;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -298,7 +297,16 @@ public class PlayerInput : MonoBehaviour
         for (int i = 0; i < abstractCommandables.Count; i++)
         {
             CommandContext context = new(abstractCommandables[i], hit, i);
-            activeCommand.Handle(context);
+
+            if (activeCommand.CanHandle(context))
+            { 
+                activeCommand.Handle(context);
+
+                if (activeCommand.IsSingleUnitCommand)
+                {
+                    break;
+                }
+            }
         }
 
         activeCommand = null;
@@ -354,13 +362,19 @@ public class PlayerInput : MonoBehaviour
 
             for (int i = 0; i < abstractUnits.Count; i++)
             {
-                CommandContext context = new(abstractUnits[i], hit, i);
+                CommandContext context = new(abstractUnits[i], hit, i, MouseButton.Right);
 
                 foreach (ICommand command in GetAvailableCommands(abstractUnits[i]))
                 {
                     if (command.CanHandle(context))
                     {
                         command.Handle(context);
+
+                        if (command.IsSingleUnitCommand)
+                        {
+                            return;
+                        }
+
                         break;
                     }
                 }

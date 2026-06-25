@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Unit_Worker : AbstractUnit, IBuildingBuilder
 {
+    public bool IsBuilding => graphAgent.GetVariable("Command", out BlackboardVariable<UnitCommands> command) 
+                               && command.Value == UnitCommands.BuildBuilding;
+
     public bool HasSupplies
     {
         get
@@ -26,6 +29,10 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         if (graphAgent.GetVariable("GatherSuppliesEvent", out BlackboardVariable<GatherSuppliesEventChannel> eventChannelVariable))
         {
             eventChannelVariable.Value.Event += HandleGatherSupplies;
+        }
+        if (graphAgent.GetVariable("BuildingEventChannel", out BlackboardVariable<BuildingEventChannel> buildingEventChannelVariable))
+        {
+            buildingEventChannelVariable.Value.Event += HandleBuildingSupplies;
         }
     }
 
@@ -58,7 +65,6 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
 
         SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
-        Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
         Bus<SupplyEvent>.Raise(new SupplyEvent(-building.Cost.Minerals, building.Cost.MineralsSO));
         Bus<SupplyEvent>.Raise(new SupplyEvent(-building.Cost.Gas, building.Cost.GasSO));
 
@@ -72,9 +78,6 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         graphAgent.SetVariableValue("BuildingSO", building.BuildingSO);
         graphAgent.SetVariableValue<GameObject>("Ghost", null);
         graphAgent.SetVariableValue("Command", UnitCommands.BuildBuilding);
-
-        SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
-        Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
     }
 
     public void CancelBuilding()
@@ -104,9 +107,49 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         Stop();
     }
 
+    public override void Deselect()
+    {
+        if (decalProjector != null)
+        {
+            decalProjector.gameObject.SetActive(false);
+        }
+
+        IsSelected = false;
+        if (!IsBuilding)
+        { 
+            SetCommandOverrides(null);
+        }
+
+        Bus<UnitDeselectEvent>.Raise(new UnitDeselectEvent(this));
+    }
+
     private void HandleGatherSupplies(GameObject self, int amount, SupplySO supply)
     {
         Bus<SupplyEvent>.Raise(new SupplyEvent(amount, supply));
     }
 
+    private void HandleBuildingSupplies(GameObject self, BuildingEventType eventType, BaseBuilding building)
+    {
+        switch(eventType)
+        {
+            case BuildingEventType.ArrivedAt:
+                if (building != null && building.Progress.State == BuildingProgress.BuildingState.Building)
+                {
+                    Stop();
+                    break;
+                }
+                SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
+                break;
+            case BuildingEventType.Begin:
+                SetCommandOverrides(new BaseCommand[] { CancelBuildingCommand });
+                break;
+            case BuildingEventType.Abort:
+            case BuildingEventType.Cancel:
+            case BuildingEventType.Completed:
+                SetCommandOverrides(null);
+                break;
+            default:
+                break;
+        }
+    }
 }

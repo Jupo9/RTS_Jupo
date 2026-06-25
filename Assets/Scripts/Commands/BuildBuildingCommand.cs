@@ -1,5 +1,5 @@
-using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 [CreateAssetMenu(fileName = "Build Building", menuName = "Units/Commands/Build Building")]
 public class BuildBuildingCommand : BaseCommand
@@ -9,9 +9,12 @@ public class BuildBuildingCommand : BaseCommand
     public override bool CanHandle(CommandContext context)
     {
 
-        if (context.Commandable is not IBuildingBuilder) return false;
+        if (context.Commandable is not IBuildingBuilder builder || builder.IsBuilding)
+        {
+            return false;
+        }
 
-        if (context.Hit.collider != null)
+        if (context.Hit.collider != null && context.Button == MouseButton.Right)
         {
             return context.Hit.collider.TryGetComponent(out BaseBuilding building)
                 && Building == building.BuildingSO

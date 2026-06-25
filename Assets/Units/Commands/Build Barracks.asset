@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e81a43705d1e1a4cbf50a2b4b858fec, type: 3}
-  m_Name: Build Command Post
+  m_Name: Build Barracks
   m_EditorClassIdentifier: Assembly-CSharp::BuildBuildingCommand
-  <Name>k__BackingField: Command Post
-  <Icon>k__BackingField: {fileID: 21300000, guid: dfebbdf93f58d764ab9aa4d54edd629e, type: 3}
+  <Name>k__BackingField: Barracks
+  <Icon>k__BackingField: {fileID: 21300000, guid: 05140302c0774b946a72e885e4c597e1, type: 3}
   <IsSingleUnitCommand>k__BackingField: 1
   <RequiresClickToActive>k__BackingField: 1
-  <Slot>k__BackingField: 0
-  <GhostPrefab>k__BackingField: {fileID: 5489659772556075847, guid: bd5d022ae0624994a9470dde40d99825, type: 3}
+  <Slot>k__BackingField: 2
+  <GhostPrefab>k__BackingField: {fileID: 5322120207449693145, guid: 746b7805109535a4b9582300473d5393, type: 3}
   <Restrictions>k__BackingField:
   - {fileID: 11400000, guid: d5459858196eaa148a967a5df63aa840, type: 2}
-  - {fileID: 11400000, guid: d16e2e7cc77df3e4d90224132e58f7c5, type: 2}
-  <Building>k__BackingField: {fileID: 11400000, guid: f737c841fc368d34984850a2b733bd5d, type: 2}
+  <Building>k__BackingField: {fileID: 11400000, guid: 4ec845a35d15ec743b7ca96037d03801, type: 2}

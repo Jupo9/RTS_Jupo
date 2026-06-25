@@ -30,6 +30,7 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable
 
     public void MoveTo(Vector3 position)
     {
+        SetCommandOverrides(null);
         // "TargetLocation" need to have the exact same name as the variable in the behavior graph, otherwise it won't work! 
         graphAgent.SetVariableValue("TargetLocation", position);
         graphAgent.SetVariableValue("Command", UnitCommands.Move);
@@ -37,6 +38,7 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable
 
     public void Stop()
     {
+        SetCommandOverrides(null);
         graphAgent.SetVariableValue("Command", UnitCommands.Stop);
     }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85cc5ed2b94d804ab3e022d12607a40, type: 3}
   m_Name: Command Post
   m_EditorClassIdentifier: Assembly-CSharp::BuildingSO
-  <Name>k__BackingField: Unit
+  <Name>k__BackingField: Command Post
   <Health>k__BackingField: 400
   <Prefab>k__BackingField: {fileID: 1589499662120937400, guid: 43943267dde60fe4a88cf5bd885c00e3, type: 3}
   <BuildTime>k__BackingField: 10

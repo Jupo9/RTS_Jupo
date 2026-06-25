@@ -22,7 +22,9 @@ public partial class FindClosestCommandPostAction : Action
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent(out BaseBuilding building) && building.UnitSO.Equals(CommandPostBuilding.Value))
+            if (collider.TryGetComponent(out BaseBuilding building) 
+                && building.UnitSO.Equals(CommandPostBuilding.Value)
+                && building.Progress.State == BuildingProgress.BuildingState.Completed)
             {
                 nearbyCommandPost.Add(building);
 
@@ -34,6 +36,7 @@ public partial class FindClosestCommandPostAction : Action
             return Status.Failure;
         }
 
+        nearbyCommandPost.Sort(new ClosestCommandPostComparer(Unit.Value.transform.position));
         CommandPost.Value = nearbyCommandPost[0].gameObject;
 
         return Status.Success;

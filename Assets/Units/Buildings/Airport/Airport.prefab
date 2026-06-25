@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3601306296963019821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 413070789909626592}
+  - component: {fileID: 141880962215749941}
+  m_Layer: 0
+  m_Name: Decal Projector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &413070789909626592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3601306296963019821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4556868348065212012}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &141880962215749941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3601306296963019821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0777d029ed3dffa4692f417d4aba19ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.DecalProjector
+  m_Material: {fileID: 2100000, guid: 739d95e6277c8024baecddb4cade9d44, type: 2}
+  m_DrawDistance: 1000
+  m_FadeScale: 0.9
+  m_StartAngleFade: 180
+  m_EndAngleFade: 180
+  m_UVScale: {x: 1, y: 1}
+  m_UVBias: {x: 0, y: 0}
+  m_RenderingLayerMask:
+    serializedVersion: 0
+    m_Bits: 2
+  m_ScaleMode: 0
+  m_Offset: {x: 0, y: 0, z: 4}
+  m_Size: {x: 4.25, y: 4.25, z: 8}
+  m_FadeFactor: 1
+  version: 1
+  m_DecalLayerMask: 1
 --- !u!1 &5827066523746683823
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +70,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4556868348065212012}
   - component: {fileID: 4212464277386913961}
-  m_Layer: 0
+  - component: {fileID: -6527754068573855681}
+  - component: {fileID: 4713899288084052391}
+  m_Layer: 7
   m_Name: Airport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,6 +93,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7344994296185896048}
+  - {fileID: 413070789909626592}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &4212464277386913961
@@ -54,6 +117,50 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 2, z: 3}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &-6527754068573855681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827066523746683823}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f87b462ce3ce294495c78e62fc1dc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BaseBuilding
+  <IsSelected>k__BackingField: 0
+  <CurrentHealth>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <AvailableCommands>k__BackingField: []
+  <UnitSO>k__BackingField: {fileID: 11400000, guid: c90ba44bc6d3cf34ca8af4b291749727, type: 2}
+  decalProjector: {fileID: 141880962215749941}
+  <CurrentQueueStartTime>k__BackingField: 0
+  <BuildingUnit>k__BackingField: {fileID: 0}
+  <MainRenderer>k__BackingField: {fileID: 8477328904039810847}
+  <Progress>k__BackingField:
+    <StartTime>k__BackingField: 0
+    <Progress>k__BackingField: 0
+    <State>k__BackingField: 3
+  <BuildingSO>k__BackingField: {fileID: 0}
+  primaryMaterial: {fileID: 2100000, guid: b35c532178876e94f917ff0196f65258, type: 2}
+  navMeshObstacle: {fileID: 4713899288084052391}
+--- !u!208 &4713899288084052391
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827066523746683823}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.25, y: 0.125, z: 1.25}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &7089809412475542427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117,7 +224,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 65f3692cf55db4a43b8befcf3d45c8a2, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b35c532178876e94f917ff0196f65258, type: 2}
+      objectReference: {fileID: 2100000, guid: 4d67b194c7df28248ac11dfd9cbd7c97, type: 2}
     - target: {fileID: -7511558181221131132, guid: 65f3692cf55db4a43b8befcf3d45c8a2, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -134,5 +241,10 @@ PrefabInstance:
 --- !u!4 &7344994296185896048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 65f3692cf55db4a43b8befcf3d45c8a2, type: 3}
+  m_PrefabInstance: {fileID: 7089809412475542427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8477328904039810847 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 65f3692cf55db4a43b8befcf3d45c8a2, type: 3}
   m_PrefabInstance: {fileID: 7089809412475542427}
   m_PrefabAsset: {fileID: 0}

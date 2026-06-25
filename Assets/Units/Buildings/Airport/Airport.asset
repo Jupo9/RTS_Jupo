@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85cc5ed2b94d804ab3e022d12607a40, type: 3}
   m_Name: Airport
   m_EditorClassIdentifier: Assembly-CSharp::BuildingSO
-  <Health>k__BackingField: 100
+  <Name>k__BackingField: Airport
+  <Health>k__BackingField: 1300
   <Prefab>k__BackingField: {fileID: 5827066523746683823, guid: ce58b4a7676b51d45869f6a426cf2db8, type: 3}
-  <BuildTime>k__BackingField: 5
+  <BuildTime>k__BackingField: 10
   <Icon>k__BackingField: {fileID: 21300000, guid: b947cd2ebe26be8448a6f7c04aabc5e5, type: 3}
+  <Cost>k__BackingField: {fileID: 11400000, guid: 3ac13e42c7ded24439f30fff1bf48652, type: 2}
   <PlacementMaterial>k__BackingField: {fileID: 2100000, guid: 4d67b194c7df28248ac11dfd9cbd7c97, type: 2}

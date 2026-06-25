@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 5688649225919751191}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ MonoBehaviour:
     m_Bits: 2
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 4}
-  m_Size: {x: 3, y: 3, z: 8}
+  m_Size: {x: 3.25, y: 3.25, z: 8}
   m_FadeFactor: 1
   version: 1
   m_DecalLayerMask: 1
@@ -124,11 +124,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6964012305514025925}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f87b462ce3ce294495c78e62fc1dc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseBuilding
+  <IsSelected>k__BackingField: 0
   <CurrentHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
   <AvailableCommands>k__BackingField: []
@@ -136,6 +137,14 @@ MonoBehaviour:
   decalProjector: {fileID: 2158089260880446154}
   <CurrentQueueStartTime>k__BackingField: 0
   <BuildingUnit>k__BackingField: {fileID: 0}
+  <MainRenderer>k__BackingField: {fileID: 3002833620398643107}
+  <Progress>k__BackingField:
+    <StartTime>k__BackingField: 0
+    <Progress>k__BackingField: 0
+    <State>k__BackingField: 3
+  <BuildingSO>k__BackingField: {fileID: 0}
+  primaryMaterial: {fileID: 2100000, guid: b35c532178876e94f917ff0196f65258, type: 2}
+  navMeshObstacle: {fileID: 2090724626757431204}
 --- !u!208 &2090724626757431204
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -215,7 +224,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: e7193d6645526da4f8d63f088f9a6f44, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b35c532178876e94f917ff0196f65258, type: 2}
+      objectReference: {fileID: 2100000, guid: 4d67b194c7df28248ac11dfd9cbd7c97, type: 2}
     - target: {fileID: 919132149155446097, guid: e7193d6645526da4f8d63f088f9a6f44, type: 3}
       propertyPath: m_Name
       value: Building_01
@@ -225,6 +234,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7193d6645526da4f8d63f088f9a6f44, type: 3}
+--- !u!23 &3002833620398643107 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: e7193d6645526da4f8d63f088f9a6f44, type: 3}
+  m_PrefabInstance: {fileID: 4498428509526723367}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4172331721270357196 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e7193d6645526da4f8d63f088f9a6f44, type: 3}
