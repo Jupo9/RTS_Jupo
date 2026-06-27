@@ -8,5 +8,6 @@ public enum UnitCommands
 	Move,
 	Gather,
 	ReturnSupplies,
-	BuildBuilding
+	BuildBuilding,
+	Attack
 }

@@ -59,7 +59,6 @@ public class BaseBuilding : AbstractCommandable
 
         buildingQueue.Add(unit);
 
-
         if (buildingQueue.Count == 1)
         {
             StartCoroutine(DoBuildUnits());

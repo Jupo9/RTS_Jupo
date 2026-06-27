@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public abstract class AbstractCommandable : MonoBehaviour, ISelectable
+public abstract class AbstractCommandable : MonoBehaviour, ISelectable, IDamageable
 {
     [field: SerializeField] public bool IsSelected { get; protected set; }
     [field: SerializeField] public int CurrentHealth { get; protected set; }
@@ -14,6 +14,8 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
 
     public delegate void HealthUpdatedEvent(AbstractCommandable commandable, int lastHealth, int newHealth);
     public event HealthUpdatedEvent OnHealthUpdated;
+
+    public Transform Transform => transform;
 
     private BaseCommand[] initialCommands;
 
@@ -61,6 +63,24 @@ public abstract class AbstractCommandable : MonoBehaviour, ISelectable
             Bus<UnitSelectedEvent>.Raise(new UnitSelectedEvent(this));
         }
     }
+
+    public void TakeDamage(int damage)
+    {
+        int lastHealth = CurrentHealth;
+        CurrentHealth = Mathf.Clamp(CurrentHealth - damage, 0, CurrentHealth);
+
+        OnHealthUpdated?.Invoke(this, lastHealth, CurrentHealth);
+        if (CurrentHealth == 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
     public void Heal(int amount)
     {
         int lastHealth = CurrentHealth;
