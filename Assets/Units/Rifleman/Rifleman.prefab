@@ -261,8 +261,10 @@ MonoBehaviour:
   <AvailableCommands>k__BackingField:
   - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
   - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
+  - {fileID: 11400000, guid: 473c33c4ba68f4f4b9c1d1ef1f83db23, type: 2}
   <UnitSO>k__BackingField: {fileID: 11400000, guid: 8b5828870a04d254c9a6ca8236bdb2ec, type: 2}
   decalProjector: {fileID: 1544155011723569586}
+  <AttackingParticleSystem>k__BackingField: {fileID: 7334213964210709637}
   DamageableSensor: {fileID: 7232458910954231967}
 --- !u!1 &2410563658819781553
 GameObject:
@@ -678,6 +680,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
@@ -758,6 +764,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+--- !u!198 &7334213964210709637 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+  m_PrefabInstance: {fileID: 7424212209951488479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7424006846924559819 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4300533007854612, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}

@@ -26,6 +26,11 @@ public class DamageableSensor : MonoBehaviour
             damageables.Add(damageable);
             OnUnitEnter?.Invoke(damageable);
         }
+
+        if (damageables.Count == 1)
+        {
+            Bus<UnitDeathEvent>.OnEvent += HandleUnitDeath;
+        }
     }
 
     private void OnTriggerExit(Collider collider)
@@ -35,7 +40,26 @@ public class DamageableSensor : MonoBehaviour
             damageables.Remove(damageable);
             OnUnitExit?.Invoke(damageable);
         }
+
+        if (damageables.Count == 0)
+        {
+            Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+        }
     }
+
+    private void OnDestroy()
+    {
+        Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
+    }
+
+    private void HandleUnitDeath(UnitDeathEvent evt)
+    {
+        if (damageables.Remove(evt.Unit))
+        {
+            OnTriggerExit(evt.Unit.GetComponent<Collider>());
+        }
+    }
+
     public void SetupFrom(AttackConfigSO attackConfig)
     {
         collider.radius = attackConfig.AttackRange;
