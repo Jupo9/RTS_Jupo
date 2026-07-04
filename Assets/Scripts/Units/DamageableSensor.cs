@@ -56,7 +56,12 @@ public class DamageableSensor : MonoBehaviour
     {
         if (damageables.Remove(evt.Unit))
         {
-            OnTriggerExit(evt.Unit.GetComponent<Collider>());
+            OnUnitExit?.Invoke(evt.Unit);
+        }
+
+        if (damageables.Count == 0)
+        {
+            Bus<UnitDeathEvent>.OnEvent -= HandleUnitDeath;
         }
     }
 

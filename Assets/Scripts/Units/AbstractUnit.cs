@@ -15,7 +15,7 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable, IAttacker
     protected BehaviorGraphAgent graphAgent;
     protected UnitSO unitSO;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         graphAgent = GetComponent<BehaviorGraphAgent>();
@@ -48,7 +48,12 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable, IAttacker
     public void MoveTo(Vector3 position)
     {
         SetCommandOverrides(null);
-        // "TargetLocation" need to have the exact same name as the variable in the behavior graph, otherwise it won't work! 
+
+        // Bug fix test
+        graphAgent.SetVariableValue<GameObject>("TargetGameObject", null);
+        // ---
+        // "TargetLocation" or others need to have the exact same name as the variable in the behavior graph, otherwise it won't work! 
+
         graphAgent.SetVariableValue("TargetLocation", position);
         graphAgent.SetVariableValue("Command", UnitCommands.Move);
     }
@@ -56,6 +61,9 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable, IAttacker
     public void Stop()
     {
         SetCommandOverrides(null);
+        // Bug fix test
+        graphAgent.SetVariableValue<GameObject>("TargetGameObject", null);
+        // ---
         graphAgent.SetVariableValue("Command", UnitCommands.Stop);
     }
     public void Attack(IDamageable damageable)
@@ -114,7 +122,7 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable, IAttacker
         return nearbyEnemies;
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         Bus<UnitDeathEvent>.Raise(new UnitDeathEvent(this));
     }

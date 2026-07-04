@@ -100,8 +100,11 @@ public partial class AttackTargetAction : Action
             {
                 unit.AttackingParticleSystem.Play();
             }
-
-            targetDamageable.TakeDamage(AttackConfig.Value.Damage);
+            if (!AttackConfig.Value.HasProjectileAttacks)
+            { 
+                // projectile attacks are handled by the specific subclass of AbstractUnit that shoot the porjectile
+                targetDamageable.TakeDamage(AttackConfig.Value.Damage);
+            }
         }
 
         return Status.Running;
