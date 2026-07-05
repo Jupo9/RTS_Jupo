@@ -6,6 +6,7 @@ public class Grenadier : Unit_Military
 {
     [SerializeField] private GameObject grenade;
     [SerializeField] private ParticleSystem explosionParticles;
+    private Collider[] enemyColliders;
 
     private Transform grenadeParent;
     private Vector3 defaultGrenadePosition;
@@ -23,6 +24,13 @@ public class Grenadier : Unit_Military
         defaultGrenadePosition = grenade.transform.localPosition;
         grenadeParent = grenade.transform.parent;
     }
+
+    protected override void Start()
+    {
+        base.Start();
+        enemyColliders = new Collider[unitSO.AttackConfig.MaxEnemiesHitPerAttack];
+    }
+
 
     // Animation Event
     public void OnThrowGrenade()
@@ -58,15 +66,42 @@ public class Grenadier : Unit_Military
             yield return null;
         }
 
-        damageable?.TakeDamage(unitSO.AttackConfig.Damage);
-
         explosionParticles.transform.SetParent(null);
         explosionParticles.transform.position = endPosition;
         explosionParticles.Play();
 
         grenade.transform.SetParent(grenadeParent);
         grenade.transform.localPosition = defaultGrenadePosition;
+
+        ApplyDamage(endPosition, damageable);
     }
+
+    private void ApplyDamage(Vector3 endPosition, IDamageable damageable)
+    {
+        damageable?.TakeDamage(unitSO.AttackConfig.Damage);
+
+        if (unitSO.AttackConfig.IsAreaOfEffect)
+        {
+            int hits = Physics.OverlapSphereNonAlloc(
+                endPosition,
+                unitSO.AttackConfig.AreaOfEffectRadius,
+                enemyColliders,
+                unitSO.AttackConfig.DamageableLayers
+            );
+
+            for (int i = 0; i < hits; i++)
+            {
+                if (enemyColliders[i].TryGetComponent(out IDamageable nearbyDamageable)
+                    && damageable != nearbyDamageable)
+                {
+                    nearbyDamageable.TakeDamage(
+                        unitSO.AttackConfig.CalculateAreaOfEffectDamage(endPosition, nearbyDamageable.Transform.position)
+                    );
+                }
+            }
+        }
+    }
+
 
     protected override void OnDestroy()
     {

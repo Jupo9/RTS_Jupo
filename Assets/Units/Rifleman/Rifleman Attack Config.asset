@@ -15,3 +15,10 @@ MonoBehaviour:
   <AttackRange>k__BackingField: 7
   <AttackDelay>k__BackingField: 1
   <Damage>k__BackingField: 6
+  <HasProjectileAttacks>k__BackingField: 0
+  <IsAreaOfEffect>k__BackingField: 0
+  <AreaOfEffectRadius>k__BackingField: 2
+  <MaxEnemiesHitPerAttack>k__BackingField: 5
+  <DamageableLayers>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 192

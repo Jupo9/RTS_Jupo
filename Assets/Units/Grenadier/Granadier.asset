@@ -19,3 +19,4 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 920f021a2d26a374593bb761fa77d29d, type: 3}
   <Cost>k__BackingField: {fileID: 11400000, guid: 517d2a3ba4847ef4a97cbe1bf165dd55, type: 2}
   <AttackConfig>k__BackingField: {fileID: 11400000, guid: 63359c2088c0b1d49969b3273220f7b5, type: 2}
+  <TransportConfig>k__BackingField: {fileID: 11400000, guid: 7ab66d293e4947f4280d0f438c6138af, type: 2}

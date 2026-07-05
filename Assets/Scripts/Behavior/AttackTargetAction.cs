@@ -24,6 +24,7 @@ public partial class AttackTargetAction : Action
     //Target
     private IDamageable targetDamageable;
     private Transform targetTransform;
+    private Collider[] enemyColliders;
 
     private float lastAttackTime;
 
@@ -41,6 +42,11 @@ public partial class AttackTargetAction : Action
 
         targetTransform = Target.Value.transform;
         targetDamageable = Target.Value.GetComponent<IDamageable>();
+
+        if (AttackConfig.Value.IsAreaOfEffect)
+        {
+            enemyColliders = new Collider[AttackConfig.Value.MaxEnemiesHitPerAttack];
+        }
 
         if (!NearbyEnemies.Value.Contains(Target.Value))
         {
@@ -61,9 +67,10 @@ public partial class AttackTargetAction : Action
 
     protected override Status OnUpdate()
     {
-        if (Target.Value == null || targetDamageable.CurrentHealth == 0)
-        {
-            return Status.Success;
+
+        if (Target.Value == null || targetDamageable.CurrentHealth == 0) 
+        { 
+            return Status.Success; 
         }
 
         if (animator != null)
@@ -78,14 +85,7 @@ public partial class AttackTargetAction : Action
 
         navMeshAgent.isStopped = true;
 
-        Quaternion lookRotation = Quaternion.LookRotation((targetTransform.position - selfTransform.position).normalized, Vector3.up);
-
-        selfTransform.rotation = Quaternion.Euler(
-            selfTransform.rotation.eulerAngles.x,
-            lookRotation.eulerAngles.y,
-            selfTransform.rotation.eulerAngles.z
-            );
-
+        LookAtTarget();
 
         if (animator != null)
         {
@@ -94,21 +94,61 @@ public partial class AttackTargetAction : Action
 
         if (Time.time >= lastAttackTime + AttackConfig.Value.AttackDelay)
         {
-            lastAttackTime = Time.time;
-
-            if (unit.AttackingParticleSystem != null)
-            {
-                unit.AttackingParticleSystem.Play();
-            }
-            if (!AttackConfig.Value.HasProjectileAttacks)
-            { 
-                // projectile attacks are handled by the specific subclass of AbstractUnit that shoot the porjectile
-                targetDamageable.TakeDamage(AttackConfig.Value.Damage);
-            }
+            ApplyDamage();
         }
 
         return Status.Running;
     }
+
+
+    private void LookAtTarget()
+    {
+        Quaternion lookRotation = Quaternion.LookRotation((targetTransform.position - selfTransform.position).normalized, Vector3.up);
+
+        selfTransform.rotation = Quaternion.Euler(
+            selfTransform.rotation.eulerAngles.x,
+            lookRotation.eulerAngles.y,
+            selfTransform.rotation.eulerAngles.z
+        );
+    }
+
+
+    private void ApplyDamage()
+    {
+        lastAttackTime = Time.time;
+        if (unit.AttackingParticleSystem != null)
+        {
+            unit.AttackingParticleSystem.Play();
+        }
+        if (AttackConfig.Value.HasProjectileAttacks) return;
+
+        targetDamageable.TakeDamage(AttackConfig.Value.Damage);
+
+        if (!AttackConfig.Value.IsAreaOfEffect) return;
+
+        int hits = Physics.OverlapSphereNonAlloc(
+            targetTransform.position,
+            AttackConfig.Value.AreaOfEffectRadius,
+            enemyColliders,
+            AttackConfig.Value.DamageableLayers
+        );
+
+        for (int i = 0; i < hits; i++)
+        {
+            if (enemyColliders[i].TryGetComponent(out IDamageable nearbyDamageable)
+                && targetDamageable != nearbyDamageable)
+            {
+                nearbyDamageable.TakeDamage(
+                    AttackConfig.Value.CalculateAreaOfEffectDamage(
+                        targetTransform.position,
+                        nearbyDamageable.Transform.position
+                    )
+                );
+            }
+        }
+    }
+
+
 
     protected override void OnEnd()
     {
