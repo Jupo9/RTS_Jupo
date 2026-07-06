@@ -209,12 +209,15 @@ MonoBehaviour:
   <CurrentHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
   <AvailableCommands>k__BackingField:
+  - {fileID: 11400000, guid: 28d46d4e318882247974a0aad29ad73f, type: 2}
   - {fileID: 11400000, guid: 547e90b69a49d19488d071dbb275903e, type: 2}
   - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
   - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
   - {fileID: 11400000, guid: 627f6e3e652a7924786e5727990280fa, type: 2}
   <UnitSO>k__BackingField: {fileID: 11400000, guid: 55ee20223763c67419e3d36563100b53, type: 2}
   decalProjector: {fileID: 6948966561873918116}
+  <AttackingParticleSystem>k__BackingField: {fileID: 0}
+  DamageableSensor: {fileID: 0}
   CancelBuildingCommand: {fileID: 11400000, guid: 8fc8e763a95fc684dabc1fc708f86f13, type: 2}
 --- !u!114 &1447191940532501056
 MonoBehaviour:

@@ -7,7 +7,7 @@ public abstract class BaseCommand : ScriptableObject, ICommand
     [field: SerializeField] public Sprite Icon { get; private set; }
     [field: SerializeField] public bool IsSingleUnitCommand { get; private set; }
     [field: SerializeField] public bool RequiresClickToActive { get; private set; } = true;
-    [field: Range(0, 8)][field: SerializeField] public int Slot { get; private set; }
+    [field: Range(-1, 8)][field: SerializeField] public int Slot { get; private set; }
     [field: SerializeField] public GameObject GhostPrefab { get; private set; }
     [field: SerializeField] public BuildingRestrictionSO[] Restrictions { get; private set; }
 

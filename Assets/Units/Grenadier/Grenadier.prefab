@@ -633,9 +633,10 @@ MonoBehaviour:
   <CurrentHealth>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
   <AvailableCommands>k__BackingField:
+  - {fileID: 11400000, guid: 28d46d4e318882247974a0aad29ad73f, type: 2}
+  - {fileID: 11400000, guid: 473c33c4ba68f4f4b9c1d1ef1f83db23, type: 2}
   - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
   - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
-  - {fileID: 11400000, guid: 473c33c4ba68f4f4b9c1d1ef1f83db23, type: 2}
   <UnitSO>k__BackingField: {fileID: 11400000, guid: 77e0700f652137043aed71f83c7464ba, type: 2}
   decalProjector: {fileID: 8398890696416364944}
   <AttackingParticleSystem>k__BackingField: {fileID: 0}

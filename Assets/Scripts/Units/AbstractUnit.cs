@@ -47,25 +47,24 @@ public abstract class AbstractUnit : AbstractCommandable, IMoveable, IAttacker
 
     public void MoveTo(Vector3 position)
     {
-        SetCommandOverrides(null);
-
-        // Bug fix test
-        graphAgent.SetVariableValue<GameObject>("TargetGameObject", null);
-        // ---
         // "TargetLocation" or others need to have the exact same name as the variable in the behavior graph, otherwise it won't work! 
-
         graphAgent.SetVariableValue("TargetLocation", position);
+        graphAgent.SetVariableValue<GameObject>("TargetGameObject", null);
+        graphAgent.SetVariableValue("Command", UnitCommands.Move);
+    }
+
+    public void MoveTo(Transform transform)
+    {
+        graphAgent.SetVariableValue("TargetGameObject", transform.gameObject);
         graphAgent.SetVariableValue("Command", UnitCommands.Move);
     }
 
     public void Stop()
     {
         SetCommandOverrides(null);
-        // Bug fix test
-        graphAgent.SetVariableValue<GameObject>("TargetGameObject", null);
-        // ---
         graphAgent.SetVariableValue("Command", UnitCommands.Stop);
     }
+
     public void Attack(IDamageable damageable)
     {
         graphAgent.SetVariableValue("TargetGameObject", damageable.Transform.gameObject);

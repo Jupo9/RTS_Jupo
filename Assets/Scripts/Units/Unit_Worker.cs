@@ -3,7 +3,7 @@ using Unity.AppUI.UI;
 using Unity.Behavior;
 using UnityEngine;
 
-public class Unit_Worker : AbstractUnit, IBuildingBuilder
+public class Unit_Worker : AbstractUnit, IBuildingBuilder, ITransportable
 {
     public bool IsBuilding => graphAgent.GetVariable("Command", out BlackboardVariable<UnitCommands> command) 
                                && command.Value == UnitCommands.BuildBuilding;
@@ -21,6 +21,7 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
         }
     }
 
+    public int TransportCapacityUsage => unitSO.TransportConfig.GetTransportCapacityUsage();
     [SerializeField] private BaseCommand CancelBuildingCommand; 
 
     protected override void Start()
@@ -151,5 +152,11 @@ public class Unit_Worker : AbstractUnit, IBuildingBuilder
             default:
                 break;
         }
+    }
+
+    public void LoadInto(ITransporter transporter)
+    {
+        MoveTo(transporter.Transform);
+        transporter.Load(this);
     }
 }

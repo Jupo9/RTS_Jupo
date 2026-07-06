@@ -11,9 +11,11 @@ public partial class MoveToTargetGameObjectAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
     [SerializeReference] public BlackboardVariable<GameObject> TargetGameObject;
+    [SerializeReference] public BlackboardVariable<float> MoveThreshold = new(0.25f);
 
     private NavMeshAgent agent;
     private Animator animator;
+    private Vector3 lastPosition;
 
     protected override Status OnStart()
     {
@@ -32,7 +34,7 @@ public partial class MoveToTargetGameObjectAction : Action
         }
 
         agent.SetDestination(targetPosition);
-
+        lastPosition = targetPosition;
         return Status.Running;
     }
 
@@ -41,6 +43,15 @@ public partial class MoveToTargetGameObjectAction : Action
         if (animator != null)
         {
             animator.SetFloat(AnimationConstants.SPEED, agent.velocity.magnitude);
+        }
+
+        Vector3 targetPosition = GetTargetPosition();
+
+        if (Vector3.Distance(targetPosition, lastPosition) >= MoveThreshold)
+        {
+            agent.SetDestination(targetPosition);
+            lastPosition = agent.destination;
+            return Status.Running;
         }
 
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)

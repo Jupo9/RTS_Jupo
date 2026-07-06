@@ -18,6 +18,12 @@ public class MoveCommand : BaseCommand
     {
         AbstractUnit unit = (AbstractUnit)context.Commandable;
 
+        if (context.Hit.collider != null && context.Hit.collider.TryGetComponent(out AbstractCommandable commandable))
+        {
+            unit.MoveTo(commandable.transform);
+            return;
+        }
+
         if (context.UnitIndex == 0)
         { 
             unitsOnLayer = 0;

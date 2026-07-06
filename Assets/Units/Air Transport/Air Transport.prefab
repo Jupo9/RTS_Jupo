@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1419462443012760725}
-  - component: {fileID: 9134770962520817353}
   - component: {fileID: 5846089620377801012}
   - component: {fileID: 8965530933466428115}
   - component: {fileID: 3075151951659546680}
   - component: {fileID: 2196381709891598577}
   - component: {fileID: 8808235839225332052}
+  - component: {fileID: 5642988193838472290}
   m_Layer: 6
-  m_Name: Air Transporter
+  m_Name: Air Transport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,28 +39,6 @@ Transform:
   - {fileID: 5035565841476514812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &9134770962520817353
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2268643167577890230}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!136 &5846089620377801012
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -125,7 +103,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -145,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  m_Graph: {fileID: 7635085257524321980, guid: c4b483f68cdc8434aab6eaafab715856, type: 2}
+  m_Graph: {fileID: -2958948220493129470, guid: b0ad42d133aaef44a9c78e563d5bdb5e, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 2638617429261943158
   m_IsInitialised: 0
@@ -179,10 +157,25 @@ MonoBehaviour:
   <AvailableCommands>k__BackingField:
   - {fileID: 11400000, guid: 96505e67e29362443bc521e81d0aaf9b, type: 2}
   - {fileID: 11400000, guid: 09ae5cbd046a33446b7007e8044a30fe, type: 2}
-  <UnitSO>k__BackingField: {fileID: 11400000, guid: 77e0700f652137043aed71f83c7464ba, type: 2}
+  - {fileID: 11400000, guid: db65ff232060c904d85e59fa11c7044c, type: 2}
+  <UnitSO>k__BackingField: {fileID: 11400000, guid: d1b7c81584d41554e97b9ac3ccdcab28, type: 2}
   decalProjector: {fileID: 86916836376113329}
   <AttackingParticleSystem>k__BackingField: {fileID: 0}
   DamageableSensor: {fileID: 0}
+  <UsedCapacity>k__BackingField: 0
+--- !u!114 &5642988193838472290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2268643167577890230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665635dac1c217349824f30f4ccd1f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivateScript
+  scriptToActivate: {fileID: 8808235839225332052}
 --- !u!1 &5889328813882671161
 GameObject:
   m_ObjectHideFlags: 0
